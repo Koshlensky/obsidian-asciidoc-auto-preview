@@ -1,0 +1,10 @@
+{
+  "id": "asciidoc-auto-preview",
+  "name": "AsciiDoc Auto Preview",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "Auto-refresh AsciiDoc preview with debouncing",
+  "author": "Your Name",
+  "authorUrl": "https://github.com/your-username",
+  "isDesktopOnly": false
+}
