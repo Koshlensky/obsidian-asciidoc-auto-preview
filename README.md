@@ -1,6 +1,6 @@
 # Asciidian
 
-An [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
+Asciidian renders .adoc files natively with a live-updating preview that refreshes automatically while you type — no manual reload required.
 
 Asciidian bundles [Asciidoctor.js](https://asciidoctor.org) directly and handles `.adoc`, `.asciidoc`, and `.asc` files out of the box.
 
