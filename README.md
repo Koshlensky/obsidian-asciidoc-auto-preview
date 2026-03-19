@@ -113,9 +113,3 @@ npm version patch   # or: minor / major
 ```
 
 To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidoc-auto-preview/` in your Obsidian vault, then reload Obsidian.
-
----
-
-## License
-
-[MIT](LICENSE)
