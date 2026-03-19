@@ -37672,6 +37672,8 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
     var _a;
     this.softWrap = !this.softWrap;
     this.sourceEl.style.whiteSpace = this.softWrap ? "pre-wrap" : "pre";
+    this.sourceEl.style.overflowWrap = this.softWrap ? "break-word" : "normal";
+    this.sourceEl.style.overflowX = this.softWrap ? "hidden" : "auto";
     (_a = this.toolbarEl.querySelector('[data-action="wrap"]')) == null ? void 0 : _a.classList.toggle("is-active", this.softWrap);
   }
   // ── Image helpers ─────────────────────────────────────────────────────────
@@ -37847,12 +37849,14 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
     const stems = Array.from(
       this.previewEl.querySelectorAll(".stem, .stemblock")
     );
+    const toTypeset = [];
     for (const el of stems) {
       if (!el.isConnected) continue;
       if (el.querySelector("mjx-container")) continue;
-      const srcEl = el.classList.contains("stemblock") ? (_a = el.querySelector(".content")) != null ? _a : el : el;
+      const isBlock = el.classList.contains("stemblock");
+      const srcEl = isBlock ? (_a = el.querySelector(".content")) != null ? _a : el : el;
       let src = (_c = (_b = srcEl.textContent) == null ? void 0 : _b.trim()) != null ? _c : "";
-      let display = el.classList.contains("stemblock");
+      let display = isBlock;
       if (src.startsWith("\\(") && src.endsWith("\\)")) {
         src = src.slice(2, -2).trim();
       } else if (src.startsWith("\\[") && src.endsWith("\\]")) {
@@ -37868,13 +37872,23 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       if (!src) continue;
       try {
         const rendered = (0, import_obsidian.renderMath)(src, display);
-        el.empty();
+        el.innerHTML = "";
         el.appendChild(rendered);
+        if (!display) toTypeset.push(el);
       } catch (e2) {
-        console.error("[Asciidian] renderMath error:", e2);
+        console.error("[Asciidian] renderMath error:", e2, { src, display });
       }
     }
     await (0, import_obsidian.finishRenderMath)();
+    if (toTypeset.length > 0) {
+      const MJ = window.MathJax;
+      if (typeof (MJ == null ? void 0 : MJ.typesetPromise) === "function") {
+        try {
+          await MJ.typesetPromise(toTypeset);
+        } catch (e2) {
+        }
+      }
+    }
   }
   // Resolve image src attributes to vault resource URLs.
   // Tries relative path first (standard AsciiDoc), then absolute vault path.

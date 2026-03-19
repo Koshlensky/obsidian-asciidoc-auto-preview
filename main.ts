@@ -318,7 +318,9 @@ class AdocView extends TextFileView {
 
     private toggleSoftWrap(): void {
         this.softWrap = !this.softWrap;
-        this.sourceEl.style.whiteSpace = this.softWrap ? 'pre-wrap' : 'pre';
+        this.sourceEl.style.whiteSpace   = this.softWrap ? 'pre-wrap' : 'pre';
+        this.sourceEl.style.overflowWrap = this.softWrap ? 'break-word' : 'normal';
+        this.sourceEl.style.overflowX    = this.softWrap ? 'hidden' : 'auto';
         this.toolbarEl
             .querySelector<HTMLElement>('[data-action="wrap"]')
             ?.classList.toggle('is-active', this.softWrap);
