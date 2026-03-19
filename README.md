@@ -1,4 +1,4 @@
-# AsciiDoc Preview
+# Asciidian (AsciiDoc Plugin for Obsidian)
 
 An [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
 
@@ -137,9 +137,3 @@ npm version patch   # or: minor / major
 To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidoc-auto-preview/` in your Obsidian vault, then reload Obsidian.
 
 > **Note:** The production bundle is ~2 MB because Asciidoctor.js is included in full. This is expected and matches the size of other AsciiDoc plugins for Obsidian.
-
----
-
-## License
-
-[MIT](LICENSE)
