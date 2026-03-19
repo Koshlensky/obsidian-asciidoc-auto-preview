@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.idea/
 
 # Build output source maps (main.js itself is committed for plugin distribution)
 *.js.map
