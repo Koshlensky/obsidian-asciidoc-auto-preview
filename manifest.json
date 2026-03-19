@@ -1,9 +1,9 @@
 {
   "id": "asciidoc-auto-preview",
-  "name": "AsciiDoc Auto Preview",
+  "name": "AsciiDoc Preview",
   "version": "1.0.0",
   "minAppVersion": "1.4.0",
-  "description": "Automatically refreshes the AsciiDoc preview when you stop typing, so you never have to manually reload the preview.",
+  "description": "Full AsciiDoc renderer for Obsidian. Opens .adoc files with live-updating preview — no manual reload needed.",
   "author": "",
   "authorUrl": "",
   "fundingUrl": "",

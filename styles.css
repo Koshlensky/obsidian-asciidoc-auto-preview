@@ -1,2 +1,560 @@
-/* This plugin adds no custom UI elements — all rendered components use
-   Obsidian's native settings API and require no additional styles. */
+/* ═══════════════════════════════════════════════════════════════════════════
+   AsciiDoc Preview — styles
+   All colours use Obsidian CSS variables so the view adapts to any theme.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── View container ──────────────────────────────────────────────────────── */
+
+.adoc-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ── Source textarea editor ──────────────────────────────────────────────── */
+
+.adoc-source-editor {
+    flex: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: none;
+    outline: none;
+    padding: 20px 24px;
+    box-sizing: border-box;
+    font-family: var(--font-monospace);
+    font-size: var(--font-text-size);
+    line-height: 1.7;
+    background: var(--background-primary);
+    color: var(--text-normal);
+    scrollbar-gutter: stable;
+}
+
+/* ── Preview pane ────────────────────────────────────────────────────────── */
+
+.adoc-preview {
+    flex: 1;
+    height: 100%;
+    padding: 24px 32px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    font-family: var(--font-text);
+    font-size: var(--font-text-size);
+    line-height: 1.7;
+    color: var(--text-normal);
+    scrollbar-gutter: stable;
+}
+
+/* ── Render error ────────────────────────────────────────────────────────── */
+
+.adoc-render-error {
+    padding: 1em 1.2em;
+    background: color-mix(in srgb, var(--color-red) 10%, transparent);
+    border-left: 3px solid var(--color-red, #e05252);
+    border-radius: 0 6px 6px 0;
+    margin: 1em 0;
+}
+
+.adoc-render-error pre {
+    margin-top: 0.5em;
+    font-size: 0.82em;
+    white-space: pre-wrap;
+    word-break: break-all;
+    opacity: 0.85;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AsciiDoc content styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Document title (#header h1) ─────────────────────────────────────────── */
+
+.adoc-preview #header h1,
+.adoc-preview #header > h1:first-child {
+    font-size: 2em;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0.15em;
+    color: var(--text-normal);
+    border-bottom: 2px solid var(--background-modifier-border);
+    padding-bottom: 0.3em;
+}
+
+.adoc-preview #header .details {
+    font-size: 0.88em;
+    color: var(--text-muted);
+    margin-bottom: 1.5em;
+}
+
+.adoc-preview #header .details span + span::before {
+    content: " · ";
+    opacity: 0.5;
+}
+
+/* ── Headings ────────────────────────────────────────────────────────────── */
+
+.adoc-preview h1,
+.adoc-preview h2,
+.adoc-preview h3,
+.adoc-preview h4,
+.adoc-preview h5,
+.adoc-preview h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 1.6em;
+    margin-bottom: 0.5em;
+    color: var(--text-normal);
+}
+
+.adoc-preview h1 { font-size: 1.8em; }
+.adoc-preview h2 {
+    font-size: 1.4em;
+    border-bottom: 1px solid var(--background-modifier-border);
+    padding-bottom: 0.2em;
+}
+.adoc-preview h3 { font-size: 1.18em; }
+.adoc-preview h4 { font-size: 1.05em; }
+.adoc-preview h5 { font-size: 0.95em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.adoc-preview h6 { font-size: 0.9em;  font-weight: 700; color: var(--text-muted); }
+
+/* ── Body text ───────────────────────────────────────────────────────────── */
+
+.adoc-preview p { margin: 0.7em 0 0.9em; }
+
+.adoc-preview a {
+    color: var(--link-color, var(--text-accent));
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--link-color, var(--text-accent)) 35%, transparent);
+    transition: border-color 0.15s;
+}
+.adoc-preview a:hover {
+    border-bottom-color: var(--link-color, var(--text-accent));
+}
+
+.adoc-preview strong { font-weight: 700; }
+.adoc-preview em     { font-style: italic; }
+
+/* ── Inline code ─────────────────────────────────────────────────────────── */
+
+.adoc-preview code,
+.adoc-preview kbd {
+    font-family: var(--font-monospace);
+    font-size: 0.87em;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+}
+
+.adoc-preview kbd {
+    box-shadow: 0 1px 0 var(--background-modifier-border);
+}
+
+/* ── Code / listing blocks ───────────────────────────────────────────────── */
+
+.adoc-preview .literalblock,
+.adoc-preview .listingblock {
+    margin: 1.1em 0;
+}
+
+.adoc-preview .literalblock > .title,
+.adoc-preview .listingblock > .title {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.3em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.adoc-preview .literalblock pre,
+.adoc-preview .listingblock pre {
+    margin: 0;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 1em 1.2em;
+    overflow-x: auto;
+    font-family: var(--font-monospace);
+    font-size: 0.87em;
+    line-height: 1.6;
+    color: var(--text-normal);
+}
+
+.adoc-preview .listingblock pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+}
+
+/* Language badge */
+.adoc-preview .listingblock pre[data-lang]::before {
+    content: attr(data-lang);
+    display: block;
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 0.5em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* ── Blockquote ──────────────────────────────────────────────────────────── */
+
+.adoc-preview blockquote,
+.adoc-preview .quoteblock blockquote {
+    margin: 1em 0;
+    padding: 0.6em 1.1em;
+    border-left: 3px solid var(--interactive-accent, var(--text-accent));
+    background: color-mix(in srgb, var(--interactive-accent, var(--text-accent)) 6%, var(--background-primary));
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+.adoc-preview .quoteblock .attribution {
+    font-size: 0.85em;
+    font-style: normal;
+    text-align: right;
+    margin-top: 0.5em;
+    color: var(--text-faint);
+}
+.adoc-preview .quoteblock .attribution::before { content: "— "; }
+
+/* ── Lists ───────────────────────────────────────────────────────────────── */
+
+.adoc-preview ul,
+.adoc-preview ol {
+    padding-left: 1.7em;
+    margin: 0.4em 0 0.8em;
+}
+
+.adoc-preview li {
+    margin: 0.25em 0;
+}
+
+.adoc-preview ul li::marker {
+    color: var(--text-muted);
+}
+
+.adoc-preview dl dt {
+    font-weight: 700;
+    margin-top: 0.7em;
+}
+.adoc-preview dl dd {
+    margin-left: 1.5em;
+    color: var(--text-normal);
+}
+
+/* ── Horizontal rule ─────────────────────────────────────────────────────── */
+
+.adoc-preview hr {
+    border: none;
+    height: 1px;
+    background: var(--background-modifier-border);
+    margin: 2em 0;
+}
+
+/* ── Images ──────────────────────────────────────────────────────────────── */
+
+.adoc-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.adoc-preview .imageblock {
+    margin: 1.2em 0;
+    text-align: center;
+}
+
+.adoc-preview .imageblock .title {
+    font-size: 0.84em;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: 0.4em;
+    text-align: center;
+}
+
+.adoc-preview .imageblock.left  { text-align: left;  float: left;  margin: 0 1.2em 1em 0; }
+.adoc-preview .imageblock.right { text-align: right; float: right; margin: 0 0 1em 1.2em; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Admonition blocks  (Note / Tip / Warning / Caution / Important)
+   Rendered as callout-style cards instead of the default AsciiDoc table layout
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.adoc-preview .admonitionblock {
+    margin: 1.2em 0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Hide the table chrome, expose as block */
+.adoc-preview .admonitionblock > table,
+.adoc-preview .admonitionblock > table > tbody,
+.adoc-preview .admonitionblock > table > tbody > tr {
+    display: block;
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+.adoc-preview .admonitionblock > table > tbody > tr {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75em;
+    padding: 0.85em 1.1em;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+/* Icon cell (type label) */
+.adoc-preview .admonitionblock td.icon {
+    flex-shrink: 0;
+    font-size: 0.72em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.15em 0;
+    min-width: 4.5em;
+    border: none;
+}
+
+/* Content cell */
+.adoc-preview .admonitionblock td.content {
+    flex: 1;
+    padding: 0;
+    border: none;
+    font-size: 0.95em;
+    word-wrap: anywhere;
+}
+
+.adoc-preview .admonitionblock td.content > :last-child { margin-bottom: 0; }
+
+/* Per-type colours */
+.adoc-preview .admonitionblock.note > table > tbody > tr {
+    background: color-mix(in srgb, var(--color-blue, #4a90d9) 8%, var(--background-primary));
+    border-color: var(--color-blue, #4a90d9);
+}
+.adoc-preview .admonitionblock.note td.icon { color: var(--color-blue, #4a90d9); }
+
+.adoc-preview .admonitionblock.tip > table > tbody > tr {
+    background: color-mix(in srgb, var(--color-green, #5aab6e) 8%, var(--background-primary));
+    border-color: var(--color-green, #5aab6e);
+}
+.adoc-preview .admonitionblock.tip td.icon { color: var(--color-green, #5aab6e); }
+
+.adoc-preview .admonitionblock.warning > table > tbody > tr {
+    background: color-mix(in srgb, var(--color-yellow, #e0a030) 10%, var(--background-primary));
+    border-color: var(--color-yellow, #e0a030);
+}
+.adoc-preview .admonitionblock.warning td.icon { color: var(--color-yellow, #e0a030); }
+
+.adoc-preview .admonitionblock.caution > table > tbody > tr {
+    background: color-mix(in srgb, var(--color-orange, #d96a30) 8%, var(--background-primary));
+    border-color: var(--color-orange, #d96a30);
+}
+.adoc-preview .admonitionblock.caution td.icon { color: var(--color-orange, #d96a30); }
+
+.adoc-preview .admonitionblock.important > table > tbody > tr {
+    background: color-mix(in srgb, var(--color-red, #c44040) 8%, var(--background-primary));
+    border-color: var(--color-red, #c44040);
+}
+.adoc-preview .admonitionblock.important td.icon { color: var(--color-red, #c44040); }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tables
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.adoc-preview table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.2em 0;
+    font-size: 0.93em;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.adoc-preview table,
+.adoc-preview th,
+.adoc-preview td {
+    border: 0 solid var(--background-modifier-border);
+}
+
+.adoc-preview table.grid-all  > * > tr > * { border-width: 1px; }
+.adoc-preview table.grid-rows > * > tr > * { border-width: 1px 0; }
+.adoc-preview table.grid-cols > * > tr > * { border-width: 0 1px; }
+
+.adoc-preview table.frame-all   { border-width: 1px; border-radius: 6px; }
+.adoc-preview table.frame-ends  { border-width: 1px 0; }
+.adoc-preview table.frame-sides { border-width: 0 1px; }
+
+.adoc-preview thead th {
+    background: var(--background-secondary);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.55em 0.9em;
+    border-bottom: 2px solid var(--background-modifier-border);
+}
+
+.adoc-preview td {
+    padding: 0.45em 0.9em;
+    vertical-align: top;
+    word-wrap: anywhere;
+}
+
+/* Stripe variants */
+.adoc-preview table.stripes-all   > tbody > tr,
+.adoc-preview table.stripes-odd   > tbody > tr:nth-of-type(odd),
+.adoc-preview table.stripes-even  > tbody > tr:nth-of-type(even),
+.adoc-preview table.stripes-hover > tbody > tr:hover {
+    background: var(--background-secondary);
+}
+
+.adoc-preview p.tableblock:last-child { margin-bottom: 0; }
+
+/* Table title */
+.adoc-preview .tableblock.frame-all + .title,
+.adoc-preview table + .title {
+    font-size: 0.83em;
+    font-style: italic;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 0.3em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Sidebar, example, and section blocks
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.adoc-preview .sidebarblock {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 1em 1.3em;
+    margin: 1.2em 0;
+}
+
+.adoc-preview .sidebarblock > .content > .title {
+    font-weight: 700;
+    margin-bottom: 0.5em;
+    font-size: 1.05em;
+}
+
+.adoc-preview .exampleblock > .content {
+    border: 1px dashed var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 0.8em 1em;
+    margin: 0.6em 0;
+    background: color-mix(in srgb, var(--background-secondary) 40%, transparent);
+}
+
+/* ── TOC ─────────────────────────────────────────────────────────────────── */
+
+.adoc-preview #toc {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 0.8em 1.1em;
+    margin-bottom: 1.8em;
+    display: inline-block;
+    min-width: 180px;
+    max-width: 360px;
+    font-size: 0.92em;
+}
+
+.adoc-preview #toctitle {
+    font-weight: 700;
+    font-size: 0.88em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.5em;
+}
+
+.adoc-preview #toc ul {
+    list-style: none;
+    padding-left: 0.8em;
+    margin: 0;
+}
+.adoc-preview #toc > ul { padding-left: 0; }
+
+.adoc-preview #toc li { margin: 0.18em 0; }
+
+.adoc-preview #toc a {
+    color: var(--link-color, var(--text-accent));
+    text-decoration: none;
+    border-bottom: none;
+}
+.adoc-preview #toc a:hover { text-decoration: underline; }
+
+/* ── Lead paragraph ──────────────────────────────────────────────────────── */
+
+.adoc-preview .paragraph.lead > p {
+    font-size: 1.13em;
+    line-height: 1.7;
+    color: var(--text-normal);
+}
+
+/* ── Callout list ────────────────────────────────────────────────────────── */
+
+.adoc-preview .colist > table {
+    border: none;
+    background: none;
+    font-size: 0.88em;
+}
+
+.adoc-preview .colist > table td {
+    padding: 0.2em 0.5em;
+    border: none;
+    vertical-align: top;
+    color: var(--text-muted);
+}
+
+/* ── Footnotes ───────────────────────────────────────────────────────────── */
+
+.adoc-preview #footnotes {
+    margin-top: 2em;
+    padding-top: 0.8em;
+    border-top: 1px solid var(--background-modifier-border);
+    font-size: 0.88em;
+    color: var(--text-muted);
+}
+
+/* ── Text utilities ──────────────────────────────────────────────────────── */
+
+.adoc-preview .line-through { text-decoration: line-through; }
+.adoc-preview .underline    { text-decoration: underline; }
+.adoc-preview .overline     { text-decoration: overline; }
+.adoc-preview .big          { font-size: 1.15em; }
+.adoc-preview .small        { font-size: 0.85em; }
+
+/* AsciiDoc named colours */
+.adoc-preview .aqua    { color: #00bfbf; } .adoc-preview .aqua-background    { background: #00fafa; }
+.adoc-preview .black   { color: #000;    } .adoc-preview .black-background   { background: #000; }
+.adoc-preview .blue    { color: #0055cc; } .adoc-preview .blue-background    { background: #a8c0ff; }
+.adoc-preview .fuchsia { color: #bf00bf; } .adoc-preview .fuchsia-background { background: #fa00fa; }
+.adoc-preview .gray    { color: #707070; } .adoc-preview .gray-background    { background: #bbb; }
+.adoc-preview .green   { color: #006000; } .adoc-preview .green-background   { background: #a0d8a0; }
+.adoc-preview .lime    { color: #00bf00; } .adoc-preview .lime-background    { background: #a0fa00; }
+.adoc-preview .maroon  { color: #600000; } .adoc-preview .maroon-background  { background: #d08080; }
+.adoc-preview .navy    { color: #000060; } .adoc-preview .navy-background    { background: #8080c0; }
+.adoc-preview .olive   { color: #606000; } .adoc-preview .olive-background   { background: #c0c060; }
+.adoc-preview .purple  { color: #600060; } .adoc-preview .purple-background  { background: #c080c0; }
+.adoc-preview .red     { color: #c00000; } .adoc-preview .red-background     { background: #ffaaaa; }
+.adoc-preview .silver  { color: #909090; } .adoc-preview .silver-background  { background: #d0d0d0; }
+.adoc-preview .teal    { color: #006060; } .adoc-preview .teal-background    { background: #80c0c0; }
+.adoc-preview .white   { color: #bfbfbf; } .adoc-preview .white-background   { background: #fafafa; }
+.adoc-preview .yellow  { color: #c0a000; } .adoc-preview .yellow-background  { background: #ffffa0; }

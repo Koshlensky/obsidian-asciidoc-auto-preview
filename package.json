@@ -1,17 +1,18 @@
 {
   "name": "obsidian-asciidoc-auto-preview",
   "version": "1.0.0",
-  "description": "Auto-refresh AsciiDoc preview on idle for Obsidian",
+  "description": "Full AsciiDoc renderer for Obsidian with live preview auto-refresh",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
-  "keywords": ["obsidian", "plugin", "asciidoc", "preview", "auto-refresh"],
+  "keywords": ["obsidian", "plugin", "asciidoc", "preview", "renderer"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@asciidoctor/core": "^3.0.4",
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
