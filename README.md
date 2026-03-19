@@ -23,7 +23,8 @@ Other AsciiDoc tools render the file on open but do **not** update the preview w
 - **Editor toolbar** — formatting shortcuts visible only in Source mode (see below)
 - **Image paste from clipboard** — `Ctrl+V` in Source mode saves the image to the vault and inserts the correct `image::filename[]` syntax automatically
 - **Math formulas** — `[latexmath]` and `[asciimath]` / `[stem]` macros rendered via Obsidian's built-in MathJax engine; AsciiMath is converted to TeX automatically using a bundled converter — no external plugins or internet connection required.
-  > **Note:**  In the current version, only multiline `[stem]` blocks and multiline `[latexmath]` blocks are supported
+  > [!NOTE] 
+  > In the current version, only multiline `[stem]` blocks and multiline `[latexmath]` blocks are supported
 
 - **xref and cross-reference link resolution** — `xref:` links and `<<File#anchor>>` cross-references open the target `.adoc` file in a **new tab**; in-page anchors (`<<anchor>>`) scroll smoothly within the preview
 - **Cross-document anchor navigation** — `xref:File.adoc#section[text]` opens the target file in a new tab and scrolls to the named anchor
@@ -107,12 +108,13 @@ Currently, the application supports only **multiline `stem` blocks** and **multi
 Supported syntaxes follow [AsciiDoc stem documentation](https://docs.asciidoctor.org/asciidoc/latest/stem/):
 
 ```asciidoc
+// ── latexmath block 
 [latexmath]
 ++++
 \lim_{n \to \infty}\frac{n}{\sqrt[n]{n!}} = {\large e}
 ++++
 
-// ── Block AsciiMath
+// ── asciimath block 
 [asciimath]
 ++++
 x = (-b +- sqrt(b^2 - 4ac)) / (2a)
@@ -200,4 +202,5 @@ npm version patch   # or: minor / major
 
 To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidian/` in your Obsidian vault, then reload Obsidian.
 
+> [!NOTE]
 > The production bundle is ~1.6 MB because Asciidoctor.js is included in full. This is expected for any AsciiDoc renderer plugin.
