@@ -1,8 +1,8 @@
-# Asciidian (AsciiDoc Plugin for Obsidian)
+# Asciidian
 
-An [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
+**Asciidian** — is an [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
 
-This plugin is a self-contained replacement for `asciidoctor-editor`. It bundles [Asciidoctor.js](https://asciidoctor.org) and handles `.adoc`, `.asciidoc`, and `.asc` files directly.
+This plugin is a self-contained replacement for `asciidoctor-editor` Obsidian plugin. It bundles [Asciidoctor.js](https://asciidoctor.org) and handles `.adoc`, `.asciidoc`, and `.asc` files directly.
 
 ---
 
@@ -29,21 +29,21 @@ Existing AsciiDoc plugins for Obsidian render the file on open but **do not upda
 
 ## Installation
 
-### Disable `asciidoctor-editor` first
+### Disable/delete other asciidoctor plugins in Obsidian (like `asciidoc-blocks`, `asciidoctor-editor`, `asciidoc-reader` ...) 
 
-This plugin registers the same file extensions (`.adoc`, `.asciidoc`, `.asc`). If both plugins are active at the same time, there will be a conflict. Disable `asciidoctor-editor` before enabling this one.
+These plugins register the same file extensions (`.adoc`, `.asciidoc`, `.asc`). If these plugins are active at the same time, there will be a conflict. Disable them before enabling `Asciidian`.
 
 ### From Community Plugins (recommended)
 
 1. Open Obsidian → **Settings** → **Community plugins**
 2. Disable **Safe mode** if prompted
-3. Click **Browse** and search for `AsciiDoc Preview`
+3. Click **Browse** and search for `Asciidian`
 4. Click **Install**, then **Enable**
 
 ### Manual installation
 
 1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/your-username/obsidian-asciidoc-auto-preview/releases/latest)
-2. Copy all three files into `.obsidian/plugins/asciidoc-auto-preview/` inside your vault
+2. Copy all three files into `.obsidian/plugins/asciidian/` inside your vault
 3. Reload Obsidian and enable the plugin under **Settings → Community plugins**
 
 ---
@@ -98,7 +98,7 @@ All three routes converge on the same `renderPreview()` function, which runs `As
 ## Repository structure
 
 ```
-obsidian-asciidoc-auto-preview/
+asciidian/
 ├── main.ts               # Plugin source (TypeScript)
 │                           ├─ AdocView   — TextFileView subclass (renderer + editor)
 │                           ├─ AdocPlugin — Plugin entry point, shared Asciidoctor processor
@@ -134,6 +134,6 @@ npm run build
 npm version patch   # or: minor / major
 ```
 
-To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidoc-auto-preview/` in your Obsidian vault, then reload Obsidian.
+To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidian/` in your Obsidian vault, then reload Obsidian.
 
 > **Note:** The production bundle is ~2 MB because Asciidoctor.js is included in full. This is expected and matches the size of other AsciiDoc plugins for Obsidian.
