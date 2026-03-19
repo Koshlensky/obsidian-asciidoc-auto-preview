@@ -33,7 +33,6 @@ Other AsciiDoc tools render the file on open but do **not** update the preview w
 - Image paths resolved to vault resources automatically; respects Obsidian's attachment folder settings
 - **Table styling** follows the AsciiDoc `frame=` and `grid=` attributes — `[frame=none, grid=none]` fully removes borders
 - **Admonition blocks** (NOTE / TIP / WARNING / CAUTION / IMPORTANT) rendered as cards with a coloured header
-- Mobile-compatible — works on Obsidian iOS and Android
 - Styles adapt to the active Obsidian theme via CSS variables
 
 ---
