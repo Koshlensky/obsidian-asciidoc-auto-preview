@@ -25,7 +25,7 @@ Other AsciiDoc tools render the file on open but do **not** update the preview w
 - **Math formulas** — `[latexmath]` and `[asciimath]` / `[stem]` macros rendered via Obsidian's built-in MathJax engine; AsciiMath is converted to TeX automatically using a bundled converter — no external plugins or internet connection required.
 
 > [!IMPORTANT] 
-> In the current version, only multiline `[stem]` blocks and multiline `[latexmath]` blocks are supported
+> In the current version, only multiline `[stem]`/`[asciimath]` blocks and multiline `[latexmath]` blocks are supported
 
 - **xref and cross-reference link resolution** — `xref:` links and `<<File#anchor>>` cross-references open the target `.adoc` file in a **new tab**; in-page anchors (`<<anchor>>`) scroll smoothly within the preview
 - **Cross-document anchor navigation** — `xref:File.adoc#section[text]` opens the target file in a new tab and scrolls to the named anchor
