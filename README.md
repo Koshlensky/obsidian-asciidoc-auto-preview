@@ -42,7 +42,7 @@ These plugins register the same file extensions (`.adoc`, `.asciidoc`, `.asc`). 
 
 ### Manual installation
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/your-username/obsidian-asciidoc-auto-preview/releases/latest)
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/Koshlensky/asciidian/releases/latest)
 2. Copy all three files into `.obsidian/plugins/asciidian/` inside your vault
 3. Reload Obsidian and enable the plugin under **Settings → Community plugins**
 
