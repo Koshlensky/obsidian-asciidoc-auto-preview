@@ -2,9 +2,10 @@
   "id": "asciidoc-auto-preview",
   "name": "AsciiDoc Auto Preview",
   "version": "1.0.0",
-  "minAppVersion": "1.0.0",
-  "description": "Auto-refresh AsciiDoc preview with debouncing",
-  "author": "Your Name",
-  "authorUrl": "https://github.com/your-username",
+  "minAppVersion": "1.4.0",
+  "description": "Automatically refreshes the AsciiDoc preview when you stop typing, so you never have to manually reload the preview.",
+  "author": "",
+  "authorUrl": "",
+  "fundingUrl": "",
   "isDesktopOnly": false
 }

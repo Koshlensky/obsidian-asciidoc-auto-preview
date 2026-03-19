@@ -1,4 +1,14 @@
-import { Editor, Plugin, Debouncer } from 'obsidian';
+import {
+    App,
+    Plugin,
+    PluginSettingTab,
+    Setting,
+    Notice,
+    TFile,
+    WorkspaceLeaf,
+    debounce,
+    Debouncer,
+} from 'obsidian';
 
 interface AsciiDocAutoPreviewSettings {
     delay: number;
@@ -6,28 +16,24 @@ interface AsciiDocAutoPreviewSettings {
 }
 
 const DEFAULT_SETTINGS: AsciiDocAutoPreviewSettings = {
-    delay: 800,
-    enabled: true
-}
+    delay: 1000,
+    enabled: true,
+};
 
 export default class AsciiDocAutoPreviewPlugin extends Plugin {
     settings: AsciiDocAutoPreviewSettings;
-    private debouncer: Debouncer<[]> | null = null;
+    private debouncedRefresh: Debouncer<[], void> | null = null;
 
     async onload() {
         await this.loadSettings();
-        
-        console.log('Loading AsciiDoc Auto Preview plugin');
-
-        this.debouncer = new Debouncer(this.runPreviewCommand.bind(this), this.settings.delay);
+        this.buildDebouncer();
 
         this.registerEvent(
-            this.app.workspace.on('editor-change', (editor: Editor) => {
+            this.app.workspace.on('editor-change', () => {
                 if (!this.settings.enabled) return;
-                
                 const activeFile = this.app.workspace.getActiveFile();
                 if (activeFile && activeFile.extension === 'adoc') {
-                    this.debouncer?.debounce();
+                    this.debouncedRefresh?.();
                 }
             })
         );
@@ -38,40 +44,86 @@ export default class AsciiDocAutoPreviewPlugin extends Plugin {
             callback: () => {
                 this.settings.enabled = !this.settings.enabled;
                 this.saveSettings();
-                new Notice(`AsciiDoc Auto Preview ${this.settings.enabled ? 'enabled' : 'disabled'}`);
-            }
+                new Notice(
+                    `AsciiDoc Auto Preview ${this.settings.enabled ? 'enabled' : 'disabled'}`
+                );
+            },
+        });
+
+        this.addCommand({
+            id: 'refresh-preview-now',
+            name: 'Refresh AsciiDoc preview now',
+            callback: () => {
+                this.refreshPreview();
+            },
         });
 
         this.addSettingTab(new AsciiDocAutoPreviewSettingTab(this.app, this));
     }
 
-    private async runPreviewCommand() {
+    buildDebouncer() {
+        this.debouncedRefresh = debounce(
+            () => this.refreshPreview(),
+            this.settings.delay,
+            true
+        );
+    }
+
+    async refreshPreview() {
         const activeFile = this.app.workspace.getActiveFile();
         if (!activeFile || activeFile.extension !== 'adoc') return;
 
-        try {
-            // Способ 1: Через выполнение команды
-            const commandId = 'asciidoc:reload-preview';
-            // @ts-ignore
-            if (this.app.commands.commands[commandId]) {
+        // Strategy 1: try known AsciiDoc plugin command IDs
+        const commandIds = [
+            'asciidoc:reload-preview',
+            'asciidoc:refresh-preview',
+            'asciidoc:reload',
+            'asciidoc-plugin:reload-preview',
+            'asciidoc-preview:reload',
+        ];
+        // @ts-ignore
+        const allCommands: Record<string, unknown> = this.app.commands?.commands ?? {};
+        for (const cmdId of commandIds) {
+            if (allCommands[cmdId]) {
                 // @ts-ignore
-                await this.app.commands.executeCommandById(commandId);
+                this.app.commands.executeCommandById(cmdId);
                 return;
             }
-            
-            // Способ 2: Через прямое обновление вью
-            const leaves = this.app.workspace.getLeavesOfType('asciidoc');
-            for (const leaf of leaves) {
-                // @ts-ignore
-                const view = leaf.view;
-                if (view && typeof view.render === 'function') {
-                    view.render();
-                    break;
-                }
-            }
-        } catch (error) {
-            console.error('Error refreshing AsciiDoc preview:', error);
         }
+
+        // Strategy 2: find known AsciiDoc view types and call their render/refresh method
+        const viewTypes = [
+            'asciidoc',
+            'asciidoc-preview',
+            'adoc-preview',
+            'asciidoc-view',
+            'adoc',
+        ];
+        for (const type of viewTypes) {
+            const leaves = this.app.workspace.getLeavesOfType(type);
+            for (const leaf of leaves) {
+                const view = leaf.view as any;
+                if (view?.render) { view.render(); return; }
+                if (view?.refresh) { view.refresh(); return; }
+                if (view?.reload) { view.reload(); return; }
+            }
+        }
+
+        // Strategy 3: iterate all leaves, find any view linked to the current .adoc file
+        this.app.workspace.iterateAllLeaves((leaf: WorkspaceLeaf) => {
+            const view = leaf.view as any;
+            const leafFile: TFile | undefined = view?.file;
+            if (leafFile?.path === activeFile.path) {
+                if (view?.render) view.render();
+                else if (view?.refresh) view.refresh();
+                else if (view?.onLoadFile) view.onLoadFile(activeFile);
+            }
+        });
+
+        // Strategy 4: trigger vault/metadataCache events that the AsciiDoc plugin may listen to
+        // @ts-ignore
+        this.app.metadataCache?.trigger('changed', activeFile);
+        this.app.vault.trigger('modify', activeFile);
     }
 
     async loadSettings() {
@@ -83,45 +135,48 @@ export default class AsciiDocAutoPreviewPlugin extends Plugin {
     }
 
     onunload() {
-        this.debouncer?.clear();
-        console.log('Unloading AsciiDoc Auto Preview plugin');
+        this.debouncedRefresh = null;
     }
 }
 
 class AsciiDocAutoPreviewSettingTab extends PluginSettingTab {
     plugin: AsciiDocAutoPreviewPlugin;
 
-    constructor(app: any, plugin: AsciiDocAutoPreviewPlugin) {
+    constructor(app: App, plugin: AsciiDocAutoPreviewPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }
 
     display(): void {
-        const {containerEl} = this;
+        const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', {text: 'AsciiDoc Auto Preview Settings'});
+        containerEl.createEl('h2', { text: 'AsciiDoc Auto Preview Settings' });
 
         new Setting(containerEl)
             .setName('Refresh delay (ms)')
-            .setDesc('Delay before auto-refresh after typing stops')
-            .addText(text => text
-                .setPlaceholder('800')
-                .setValue(this.plugin.settings.delay.toString())
-                .onChange(async (value) => {
-                    this.plugin.settings.delay = parseInt(value) || 800;
-                    this.plugin.debouncer?.setDelay(this.plugin.settings.delay);
-                    await this.plugin.saveSettings();
-                }));
+            .setDesc('Milliseconds of inactivity before the preview is refreshed')
+            .addText(text =>
+                text
+                    .setPlaceholder('1000')
+                    .setValue(this.plugin.settings.delay.toString())
+                    .onChange(async value => {
+                        const parsed = parseInt(value);
+                        this.plugin.settings.delay =
+                            isNaN(parsed) || parsed < 100 ? 1000 : parsed;
+                        this.plugin.buildDebouncer();
+                        await this.plugin.saveSettings();
+                    })
+            );
 
         new Setting(containerEl)
             .setName('Enable auto preview')
-            .setDesc('Toggle automatic preview refreshing')
-            .addToggle(toggle => toggle
-                .setValue(this.plugin.settings.enabled)
-                .onChange(async (value) => {
+            .setDesc('Automatically refresh the AsciiDoc preview when you stop typing')
+            .addToggle(toggle =>
+                toggle.setValue(this.plugin.settings.enabled).onChange(async value => {
                     this.plugin.settings.enabled = value;
                     await this.plugin.saveSettings();
-                }));
+                })
+            );
     }
 }
