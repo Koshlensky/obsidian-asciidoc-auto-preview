@@ -1,11 +1,10 @@
 {
-  "id": "asciidoc-auto-preview",
-  "name": "AsciiDoc Preview",
+  "id": "asciidian",
+  "name": "Asciidian",
   "version": "1.0.0",
   "minAppVersion": "1.4.0",
-  "description": "Full AsciiDoc renderer for Obsidian. Opens .adoc files with live-updating preview — no manual reload needed.",
-  "author": "",
-  "authorUrl": "",
-  "fundingUrl": "",
+  "description": "Full AsciiDoc renderer for Obsidian. Opens .adoc files with live-updating preview, no manual reload needed.",
+  "author": "Nick Koshlensky",
+  "authorUrl": "https://github.com/Koshlensky",
   "isDesktopOnly": false
 }

@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-asciidoc-auto-preview",
+  "name": "asciidian",
   "version": "1.0.0",
   "description": "Full AsciiDoc renderer for Obsidian with live preview auto-refresh",
   "main": "main.js",
@@ -8,8 +8,15 @@
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
-  "keywords": ["obsidian", "plugin", "asciidoc", "preview", "renderer"],
-  "author": "",
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "asciidoc",
+    "asciidian",
+    "preview",
+    "renderer"
+  ],
+  "author": "Nick Koshlensky",
   "license": "MIT",
   "devDependencies": {
     "@asciidoctor/core": "^3.0.4",
@@ -21,5 +28,8 @@
     "obsidian": "latest",
     "tslib": "^2.6.0",
     "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "asciimath2tex": "^1.5.0"
   }
 }

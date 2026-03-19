@@ -1,44 +1,46 @@
 # Asciidian
 
-**Asciidian** — is an [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
+An [Obsidian](https://obsidian.md) plugin that **renders `.adoc` files natively** inside Obsidian, with a live-updating preview that refreshes automatically while you type — no manual reload required.
 
-This plugin is a self-contained replacement for `asciidoctor-editor` Obsidian plugin. It bundles [Asciidoctor.js](https://asciidoctor.org) and handles `.adoc`, `.asciidoc`, and `.asc` files directly.
+Asciidian bundles [Asciidoctor.js](https://asciidoctor.org) directly and handles `.adoc`, `.asciidoc`, and `.asc` files out of the box.
 
 ---
 
 ## The problem this solves
 
-Existing AsciiDoc plugins for Obsidian render the file on open but **do not update the preview** when the file is edited. You have to manually trigger a reload every time. Markdown files in Obsidian work without this limitation — this plugin brings the same behaviour to AsciiDoc.
+Other AsciiDoc tools render the file on open but do **not** update the preview while you edit. You have to manually trigger a reload every time you change something. Markdown files in Obsidian don't have this limitation — Asciidian brings the same behaviour to AsciiDoc.
 
 ---
 
 ## Features
 
-- Renders `.adoc` / `.asciidoc` / `.asc` files with full AsciiDoc support (headings, tables, admonitions, code blocks, images, TOC, footnotes, …)
+- Renders `.adoc` / `.asciidoc` / `.asc` files with full AsciiDoc support: headings, tables, admonitions, code blocks, images, TOC, footnotes, callout lists, and more
 - **Live preview** — automatically re-renders while you type, with a configurable debounce delay
 - **Three auto-refresh triggers** work simultaneously:
-  1. Editing in our own source mode (textarea in a split pane)
-  2. Editing in Obsidian's built-in plain-text editor in another pane
-  3. Any external file modification detected by the vault
-- Toggle between **Source** (plain-text editor) and **Preview** (rendered HTML) modes with one click
-- Image paths resolved to vault resources automatically
-- Configurable default mode and refresh delay
+  1. Editing in Asciidian's own Source mode (textarea in a split pane)
+  2. Editing the file in Obsidian's built-in plain-text editor in another pane
+  3. Any external modification detected by the vault (auto-save, external editor)
+- **Editor toolbar** — formatting shortcuts visible only in Source mode (see below)
+- **Image paste from clipboard** — `Ctrl+V` in Source mode saves the image to the vault and inserts the correct `image::filename[]` syntax automatically
+- **Math formulas** — `[latexmath]` and `[asciimath]` / `[stem]` macros rendered via Obsidian's built-in MathJax engine; AsciiMath is converted to TeX automatically using a bundled converter — no external plugins or internet connection required.
+  > **Note:**  In the current version, only multiline `[stem]` blocks and multiline `[latexmath]` blocks are supported
+
+- **xref and cross-reference link resolution** — `xref:` links and `<<File#anchor>>` cross-references open the target `.adoc` file in a **new tab**; in-page anchors (`<<anchor>>`) scroll smoothly within the preview
+- **Cross-document anchor navigation** — `xref:File.adoc#section[text]` opens the target file in a new tab and scrolls to the named anchor
+- **Internal link handling** — all clicks in the preview are intercepted: external URLs open in the system browser, in-page anchors scroll smoothly, cross-file links open in Obsidian
+- Image paths resolved to vault resources automatically; respects Obsidian's attachment folder settings
+- **Table styling** follows the AsciiDoc `frame=` and `grid=` attributes — `[frame=none, grid=none]` fully removes borders
+- **Admonition blocks** (NOTE / TIP / WARNING / CAUTION / IMPORTANT) rendered as cards with a coloured header
+- Mobile-compatible — works on Obsidian iOS and Android
 - Styles adapt to the active Obsidian theme via CSS variables
 
 ---
 
 ## Installation
 
-### Disable/delete other asciidoctor plugins in Obsidian (like `asciidoc-blocks`, `asciidoctor-editor`, `asciidoc-reader` ...) 
+### Disable other AsciiDoc plugins first
 
-These plugins register the same file extensions (`.adoc`, `.asciidoc`, `.asc`). If these plugins are active at the same time, there will be a conflict. Disable them before enabling `Asciidian`.
-
-### From Community Plugins (recommended)
-
-1. Open Obsidian → **Settings** → **Community plugins**
-2. Disable **Safe mode** if prompted
-3. Click **Browse** and search for `Asciidian`
-4. Click **Install**, then **Enable**
+Asciidian registers the `.adoc`, `.asciidoc`, and `.asc` extensions. If another AsciiDoc-render plugin is active at the same time, there will probably be a conflict. **Disable any other AsciiDoc plugin before enabling Asciidian.**
 
 ### Manual installation
 
@@ -50,48 +52,106 @@ These plugins register the same file extensions (`.adoc`, `.asciidoc`, `.asc`). 
 
 ## Usage
 
-Open any `.adoc` file — it opens in **Preview mode** by default (configurable).
+Create or open any `.adoc` file — it opens in **Preview mode** by default.
 
 ### Split-pane live editing
 
-1. Open the `.adoc` file → it shows the rendered preview
-2. Open the same file in a second pane → set one pane to **Source** mode (click the book icon)
-3. Type in the Source pane → the Preview pane updates automatically
+1. Open a `.adoc` file → it shows the rendered preview
+2. Right-click the tab → **Split right** (or use the command palette)
+3. In one pane, click the **book icon** to switch to Source mode
+4. Type in the Source pane — the Preview pane updates automatically
+
+### New AsciiDoc note
+
+- **Right-click** any file or folder in the file explorer → **New .adoc note**
+- Or open the Command Palette (`Ctrl+P`) → **Asciidian: New AsciiDoc note**
+
+The new file opens immediately and is created in the same folder as the selected item.
 
 ### Mode toggle
 
-Click the **book icon** (⊞) in the view header to switch between Source and Preview modes.
+Click the **book icon** in the view header to switch between Source and Preview modes.
 
-### Commands
+---
 
-| Command | Description |
-|---|---|
-| *(none — use the header icon)* | Toggle source / preview |
+### Pasting images
+
+- **`Ctrl+V` with an image in the clipboard** — Asciidian detects the image, saves it to the vault (using Obsidian's configured attachment folder), and inserts `image::Pasted image YYYYMMDD_HHmmss.png[]` at the cursor. No extra steps required.
+- **Img toolbar button** — same behaviour when the clipboard contains an image; inserts a placeholder template otherwise.
+
+### Cross-references and anchors
+
+```asciidoc
+// Define an anchor on a heading or block
+[#my-section]
+== My Section
+
+// Link to it within the same document
+<<my-section>>
+
+// Link to it from another document (opens in a new tab and scrolls to the section)
+xref:OtherFile.adoc#my-section[Go to My Section]
+
+// Alternative cross-reference syntax
+<<OtherFile.adoc#my-section,Go to My Section>>
+```
+
+All three forms work. External `.html` paths generated by Asciidoctor are automatically rewritten to `.adoc` before the lookup.
+
+### Math formulas
+
+Asciidian renders math **self-contained** — no external plugins or internet required. LaTeX is rendered via Obsidian's built-in MathJax; AsciiMath is automatically converted to TeX by a bundled converter.
+
+Currently, the application supports only **multiline `stem` blocks** and **multiline `latexmath` blocks**.
+
+Supported syntaxes follow [AsciiDoc stem documentation](https://docs.asciidoctor.org/asciidoc/latest/stem/):
+
+```asciidoc
+[latexmath]
+++++
+\lim_{n \to \infty}\frac{n}{\sqrt[n]{n!}} = {\large e}
+++++
+
+// ── Block AsciiMath
+[asciimath]
+++++
+x = (-b +- sqrt(b^2 - 4ac)) / (2a)
+++++
+
+// ── stem block (defaults to asciimath)
+[stem]
+++++
+\begin{equation}
+c = \sqrt{a^2 + b^2}
+\end{equation}
+++++
+```
 
 ---
 
 ## Settings
 
-Open **Settings → AsciiDoc Preview**.
+Open **Settings → Asciidian**.
 
 | Setting | Default | Description |
 |---|---|---|
 | **Auto-refresh delay (ms)** | `500` | Milliseconds to wait after the last keystroke before re-rendering. Minimum: 100 ms. |
-| **Default view mode** | `Preview` | Whether `.adoc` files open in Preview or Source mode. |
+
+`.adoc` files always open in **Preview** mode.
 
 ---
 
-## How the live-refresh works
+## How the live refresh works
 
-When a preview pane is open, it listens to three independent triggers simultaneously:
+When a Preview pane is open, it listens to three independent triggers simultaneously:
 
 | Trigger | Scenario |
 |---|---|
 | `workspace → editor-change` | The same file is open in Obsidian's built-in plain-text editor in another pane |
-| Plugin internal event `adoc-changed` | The file is open in our own Source mode in a split pane |
-| `vault → modify` | The file was saved to disk (auto-save, external editor, or manual Ctrl+S) |
+| Plugin internal broadcast | The file is open in Asciidian's Source mode in a split pane |
+| `vault → modify` | The file was saved to disk (auto-save, Ctrl+S, or external editor) |
 
-All three routes converge on the same `renderPreview()` function, which runs `Asciidoctor.convert()` on the current content and injects the resulting HTML into the preview pane.
+All three routes feed into the same `renderPreview()` function, which runs `Asciidoctor.convert()` on the latest content and injects the HTML into the preview pane.
 
 ---
 
@@ -100,16 +160,20 @@ All three routes converge on the same `renderPreview()` function, which runs `As
 ```
 asciidian/
 ├── main.ts               # Plugin source (TypeScript)
-│                           ├─ AdocView   — TextFileView subclass (renderer + editor)
-│                           ├─ AdocPlugin — Plugin entry point, shared Asciidoctor processor
+│                           ├─ AdocView       — TextFileView subclass
+│                           │                    renderer · source editor · toolbar
+│                           │                    link handler · image paste · anchor nav
+│                           ├─ AdocPlugin     — Plugin entry point, shared Asciidoctor
+│                           │                    processor, pending-anchor registry
 │                           └─ AdocSettingTab — Settings UI
-├── main.js               # Compiled & bundled output (committed for distribution)
-├── manifest.json         # Obsidian plugin metadata (id, name, version, minAppVersion)
+├── main.js               # Compiled & bundled output — committed for distribution
+├── manifest.json         # Obsidian plugin metadata
 ├── versions.json         # Maps each release version to its minimum Obsidian version
-├── styles.css            # View container, textarea editor, and AsciiDoc preview styles
+├── styles.css            # View container, toolbar, source editor, and preview styles
+│                           (admonition cards, frame/grid-aware table borders, theme vars)
 ├── esbuild.config.mjs    # esbuild bundler configuration
 ├── tsconfig.json         # TypeScript compiler options
-├── package.json          # npm project config; includes @asciidoctor/core as a dev dependency
+├── package.json          # npm project config; includes @asciidoctor/core as a dependency
 ├── version-bump.mjs      # Syncs version across manifest.json and versions.json on npm version
 └── LICENSE               # MIT License
 ```
@@ -121,7 +185,7 @@ asciidian/
 **Requirements:** Node.js ≥ 18, npm
 
 ```bash
-# Install dependencies (includes @asciidoctor/core ~1.8 MB bundle)
+# Install dependencies (includes @asciidoctor/core, ~1.6 MB bundle)
 npm install
 
 # Watch mode — rebuilds on every save
@@ -136,4 +200,4 @@ npm version patch   # or: minor / major
 
 To test locally, copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/asciidian/` in your Obsidian vault, then reload Obsidian.
 
-> **Note:** The production bundle is ~2 MB because Asciidoctor.js is included in full. This is expected and matches the size of other AsciiDoc plugins for Obsidian.
+> The production bundle is ~1.6 MB because Asciidoctor.js is included in full. This is expected for any AsciiDoc renderer plugin.

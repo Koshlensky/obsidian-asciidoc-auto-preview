@@ -29,6 +29,379 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
 
+// node_modules/asciimath2tex/dist/asciimath2tex.mjs
+function t(t2, e2) {
+  (null == e2 || e2 > t2.length) && (e2 = t2.length);
+  for (var a2 = 0, i = new Array(e2); a2 < e2; a2++) i[a2] = t2[a2];
+  return i;
+}
+function e(e2, a2) {
+  var i = "undefined" != typeof Symbol && e2[Symbol.iterator] || e2["@@iterator"];
+  if (i) return (i = i.call(e2)).next.bind(i);
+  if (Array.isArray(e2) || (i = function(e3, a3) {
+    if (e3) {
+      if ("string" == typeof e3) return t(e3, a3);
+      var i2 = Object.prototype.toString.call(e3).slice(8, -1);
+      return "Object" === i2 && e3.constructor && (i2 = e3.constructor.name), "Map" === i2 || "Set" === i2 ? Array.from(e3) : "Arguments" === i2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(i2) ? t(e3, a3) : void 0;
+    }
+  }(e2)) || a2 && e2 && "number" == typeof e2.length) {
+    i && (e2 = i);
+    var s = 0;
+    return function() {
+      return s >= e2.length ? { done: true } : { done: false, value: e2[s++] };
+    };
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+var a = /* @__PURE__ */ function() {
+  function t2() {
+    this.decimalsign = "\\.", this.setup_symbols(), this.sort_symbols();
+  }
+  var a2 = t2.prototype;
+  return a2.setup_symbols = function() {
+    this.greek_letters = ["alpha", "beta", "gamma", "Gamma", "delta", "Delta", "epsilon", "varepsilon", "zeta", "eta", "theta", "Theta", "vartheta", "iota", "kappa", "lambda", "Lambda", "mu", "nu", "xi", "Xi", "pi", "Pi", "rho", "sigma", "Sigma", "tau", "upsilon", "phi", "Phi", "varphi", "chi", "psi", "Psi", "omega", "Omega"], this.relations = [{ asciimath: ":=", tex: ":=" }, { asciimath: ":|:", tex: "\\mid" }, { asciimath: "=>", tex: "\\Rightarrow" }, { asciimath: "approx", tex: "\\approx" }, { asciimath: "~~", tex: "\\approx" }, { asciimath: "cong", tex: "\\cong" }, { asciimath: "~=", tex: "\\cong" }, { asciimath: "equiv", tex: "\\equiv" }, { asciimath: "-=", tex: "\\equiv" }, { asciimath: "exists", tex: "\\exists" }, { asciimath: "EE", tex: "\\exists" }, { asciimath: "forall", tex: "\\forall" }, { asciimath: "AA", tex: "\\forall" }, { asciimath: ">=", tex: "\\ge" }, { asciimath: "ge", tex: "\\ge" }, { asciimath: "gt=", tex: "\\geq" }, { asciimath: "geq", tex: "\\geq" }, { asciimath: "gt", tex: "\\gt" }, { asciimath: "in", tex: "\\in" }, { asciimath: "<=", tex: "\\le" }, { asciimath: "le", tex: "\\le" }, { asciimath: "lt=", tex: "\\leq" }, { asciimath: "leq", tex: "\\leq" }, { asciimath: "lt", tex: "\\lt" }, { asciimath: "models", tex: "\\models" }, { asciimath: "|==", tex: "\\models" }, { asciimath: "!=", tex: "\\ne" }, { asciimath: "ne", tex: "\\ne" }, { asciimath: "notin", tex: "\\notin" }, { asciimath: "!in", tex: "\\notin" }, { asciimath: "prec", tex: "\\prec" }, { asciimath: "-lt", tex: "\\prec" }, { asciimath: "-<", tex: "\\prec" }, { asciimath: "preceq", tex: "\\preceq" }, { asciimath: "-<=", tex: "\\preceq" }, { asciimath: "propto", tex: "\\propto" }, { asciimath: "prop", tex: "\\propto" }, { asciimath: "subset", tex: "\\subset" }, { asciimath: "sub", tex: "\\subset" }, { asciimath: "subseteq", tex: "\\subseteq" }, { asciimath: "sube", tex: "\\subseteq" }, { asciimath: "succ", tex: "\\succ" }, { asciimath: ">-", tex: "\\succ" }, { asciimath: "succeq", tex: "\\succeq" }, { asciimath: ">-=", tex: "\\succeq" }, { asciimath: "supset", tex: "\\supset" }, { asciimath: "sup", tex: "\\supset" }, { asciimath: "supseteq", tex: "\\supseteq" }, { asciimath: "supe", tex: "\\supseteq" }, { asciimath: "vdash", tex: "\\vdash" }, { asciimath: "|--", tex: "\\vdash" }], this.constants = [{ asciimath: "dt", tex: "dt" }, { asciimath: "dx", tex: "dx" }, { asciimath: "dy", tex: "dy" }, { asciimath: "dz", tex: "dz" }, { asciimath: "prime", tex: "'" }, { asciimath: "implies", tex: "\\implies" }, { asciimath: "epsi", tex: "\\epsilon" }, { asciimath: "leftrightarrow", tex: "\\leftrightarrow" }, { asciimath: "Leftrightarrow", tex: "\\Leftrightarrow" }, { asciimath: "rightarrow", tex: "\\rightarrow" }, { asciimath: "Rightarrow", tex: "\\Rightarrow" }, { asciimath: "backslash", tex: "\\backslash" }, { asciimath: "leftarrow", tex: "\\leftarrow" }, { asciimath: "Leftarrow", tex: "\\Leftarrow" }, { asciimath: "setminus", tex: "\\setminus" }, { asciimath: "bigwedge", tex: "\\bigwedge" }, { asciimath: "diamond", tex: "\\diamond" }, { asciimath: "bowtie", tex: "\\bowtie" }, { asciimath: "bigvee", tex: "\\bigvee" }, { asciimath: "bigcap", tex: "\\bigcap" }, { asciimath: "bigcup", tex: "\\bigcup" }, { asciimath: "square", tex: "\\square" }, { asciimath: "lamda", tex: "\\lambda" }, { asciimath: "Lamda", tex: "\\Lambda" }, { asciimath: "aleph", tex: "\\aleph" }, { asciimath: "angle", tex: "\\angle" }, { asciimath: "frown", tex: "\\frown" }, { asciimath: "qquad", tex: "\\qquad" }, { asciimath: "cdots", tex: "\\cdots" }, { asciimath: "vdots", tex: "\\vdots" }, { asciimath: "ddots", tex: "\\ddots" }, { asciimath: "cdot", tex: "\\cdot" }, { asciimath: "star", tex: "\\star" }, { asciimath: "|><|", tex: "\\bowtie" }, { asciimath: "circ", tex: "\\circ" }, { asciimath: "oint", tex: "\\oint" }, { asciimath: "grad", tex: "\\nabla" }, { asciimath: "quad", tex: "\\quad" }, { asciimath: "uarr", tex: "\\uparrow" }, { asciimath: "darr", tex: "\\downarrow" }, { asciimath: "downarrow", tex: "\\downarrow" }, { asciimath: "rarr", tex: "\\rightarrow" }, { asciimath: ">->>", tex: "\\twoheadrightarrowtail" }, { asciimath: "larr", tex: "\\leftarrow" }, { asciimath: "harr", tex: "\\leftrightarrow" }, { asciimath: "rArr", tex: "\\Rightarrow" }, { asciimath: "lArr", tex: "\\Leftarrow" }, { asciimath: "hArr", tex: "\\Leftrightarrow" }, { asciimath: "ast", tex: "\\ast" }, { asciimath: "***", tex: "\\star" }, { asciimath: "|><", tex: "\\ltimes" }, { asciimath: "><|", tex: "\\rtimes" }, { asciimath: "^^^", tex: "\\bigwedge" }, { asciimath: "vvv", tex: "\\bigvee" }, { asciimath: "cap", tex: "\\cap" }, { asciimath: "nnn", tex: "\\bigcap" }, { asciimath: "cup", tex: "\\cup" }, { asciimath: "uuu", tex: "\\bigcup" }, { asciimath: "not", tex: "\\neg" }, { asciimath: "<=>", tex: "\\Leftrightarrow" }, { asciimath: "_|_", tex: "\\bot" }, { asciimath: "bot", tex: "\\bot" }, { asciimath: "int", tex: "\\int" }, { asciimath: "del", tex: "\\partial" }, { asciimath: "...", tex: "\\ldots" }, { asciimath: "/_\\", tex: "\\triangle" }, { asciimath: "|__", tex: "\\lfloor" }, { asciimath: "__|", tex: "\\rfloor" }, { asciimath: "dim", tex: "\\dim" }, { asciimath: "mod", tex: "\\operatorname{mod}" }, { asciimath: "lub", tex: "\\operatorname{lub}" }, { asciimath: "glb", tex: "\\operatorname{glb}" }, { asciimath: ">->", tex: "\\rightarrowtail" }, { asciimath: "->>", tex: "\\twoheadrightarrow" }, { asciimath: "|->", tex: "\\mapsto" }, { asciimath: "lim", tex: "\\lim" }, { asciimath: "Lim", tex: "\\operatorname{Lim}" }, { asciimath: "and", tex: "\\quad\\text{and}\\quad" }, { asciimath: "**", tex: "\\ast" }, { asciimath: "//", tex: "/" }, { asciimath: "\\", tex: "\\," }, { asciimath: "\\\\", tex: "\\backslash" }, { asciimath: "xx", tex: "\\times" }, { asciimath: "-:", tex: "\\div" }, { asciimath: "o+", tex: "\\oplus" }, { asciimath: "ox", tex: "\\otimes" }, { asciimath: "o.", tex: "\\odot" }, { asciimath: "^", tex: "\\hat{}" }, { asciimath: "_", tex: "\\_" }, { asciimath: "^^", tex: "\\wedge" }, { asciimath: "vv", tex: "\\vee" }, { asciimath: "nn", tex: "\\cap" }, { asciimath: "uu", tex: "\\cup" }, { asciimath: "TT", tex: "\\top" }, { asciimath: "+-", tex: "\\pm" }, { asciimath: "O/", tex: "\\emptyset" }, { asciimath: "oo", tex: "\\infty" }, { asciimath: ":.", tex: "\\therefore" }, { asciimath: ":'", tex: "\\because" }, { asciimath: "/_", tex: "\\angle" }, { asciimath: "|~", tex: "\\lceil" }, { asciimath: "~|", tex: "\\rceil" }, { asciimath: "CC", tex: "\\mathbb{C}" }, { asciimath: "NN", tex: "\\mathbb{N}" }, { asciimath: "QQ", tex: "\\mathbb{Q}" }, { asciimath: "RR", tex: "\\mathbb{R}" }, { asciimath: "ZZ", tex: "\\mathbb{Z}" }, { asciimath: "->", tex: "\\to" }, { asciimath: "or", tex: "\\quad\\text{or}\\quad" }, { asciimath: "if", tex: "\\quad\\text{if}\\quad" }, { asciimath: "iff", tex: "\\iff" }, { asciimath: "*", tex: "\\cdot" }, { asciimath: "@", tex: "\\circ" }, { asciimath: "%", tex: "\\%" }, { asciimath: "boxempty", tex: "\\square" }, { asciimath: "lambda", tex: "\\lambda" }, { asciimath: "Lambda", tex: "\\Lambda" }, { asciimath: "nabla", tex: "\\nabla" }, { asciimath: "uparrow", tex: "\\uparrow" }, { asciimath: "downarrow", tex: "\\downarrow" }, { asciimath: "twoheadrightarrowtail", tex: "\\twoheadrightarrowtail" }, { asciimath: "ltimes", tex: "\\ltimes" }, { asciimath: "rtimes", tex: "\\rtimes" }, { asciimath: "neg", tex: "\\neg" }, { asciimath: "partial", tex: "\\partial" }, { asciimath: "ldots", tex: "\\ldots" }, { asciimath: "triangle", tex: "\\triangle" }, { asciimath: "lfloor", tex: "\\lfloor" }, { asciimath: "rfloor", tex: "\\rfloor" }, { asciimath: "rightarrowtail", tex: "\\rightarrowtail" }, { asciimath: "twoheadrightarrow", tex: "\\twoheadrightarrow" }, { asciimath: "mapsto", tex: "\\mapsto" }, { asciimath: "times", tex: "\\times" }, { asciimath: "div", tex: "\\div" }, { asciimath: "divide", tex: "\\div" }, { asciimath: "oplus", tex: "\\oplus" }, { asciimath: "otimes", tex: "\\otimes" }, { asciimath: "odot", tex: "\\odot" }, { asciimath: "wedge", tex: "\\wedge" }, { asciimath: "vee", tex: "\\vee" }, { asciimath: "top", tex: "\\top" }, { asciimath: "pm", tex: "\\pm" }, { asciimath: "emptyset", tex: "\\emptyset" }, { asciimath: "infty", tex: "\\infty" }, { asciimath: "therefore", tex: "\\therefore" }, { asciimath: "because", tex: "\\because" }, { asciimath: "lceil", tex: "\\lceil" }, { asciimath: "rceil", tex: "\\rceil" }, { asciimath: "to", tex: "\\to" }, { asciimath: "langle", tex: "\\langle" }, { asciimath: "lceiling", tex: "\\lceil" }, { asciimath: "rceiling", tex: "\\rceil" }, { asciimath: "max", tex: "\\max" }, { asciimath: "min", tex: "\\min" }, { asciimath: "prod", tex: "\\prod" }, { asciimath: "sum", tex: "\\sum" }], this.constants = this.constants.concat(this.relations), this.left_brackets = [{ asciimath: "langle", tex: "\\langle" }, { asciimath: "(:", tex: "\\langle" }, { asciimath: "<<", tex: "\\langle" }, { asciimath: "{:", tex: "." }, { asciimath: "(", tex: "(" }, { asciimath: "[", tex: "[" }, { asciimath: "|:", tex: "\\lvert" }, { asciimath: "{", tex: "\\lbrace" }, { asciimath: "lbrace", tex: "\\lbrace" }], this.right_brackets = [{ asciimath: "rangle", tex: "\\rangle" }, { asciimath: ":)", tex: "\\rangle" }, { asciimath: ">>", tex: "\\rangle" }, { asciimath: ":}", tex: ".", free_tex: ":\\}" }, { asciimath: ")", tex: ")" }, { asciimath: "]", tex: "]" }, { asciimath: ":|", tex: "\\rvert" }, { asciimath: "}", tex: "\\rbrace" }, { asciimath: "rbrace", tex: "\\rbrace" }], this.leftright_brackets = [{ asciimath: "|", left_tex: "\\lvert", right_tex: "\\rvert", free_tex: "|", mid_tex: "\\mid" }], this.unary_symbols = [{ asciimath: "sqrt", tex: "\\sqrt" }, { asciimath: "f", tex: "f", func: true }, { asciimath: "g", tex: "g", func: true }, { asciimath: "sin", tex: "\\sin", func: true }, { asciimath: "cos", tex: "\\cos", func: true }, { asciimath: "tan", tex: "\\tan", func: true }, { asciimath: "arcsin", tex: "\\arcsin", func: true }, { asciimath: "arccos", tex: "\\arccos", func: true }, { asciimath: "arctan", tex: "\\arctan", func: true }, { asciimath: "sinh", tex: "\\sinh", func: true }, { asciimath: "cosh", tex: "\\cosh", func: true }, { asciimath: "tanh", tex: "\\tanh", func: true }, { asciimath: "cot", tex: "\\cot", func: true }, { asciimath: "coth", tex: "\\coth", func: true }, { asciimath: "sech", tex: "\\operatorname{sech}", func: true }, { asciimath: "csch", tex: "\\operatorname{csch}", func: true }, { asciimath: "sec", tex: "\\sec", func: true }, { asciimath: "csc", tex: "\\csc", func: true }, { asciimath: "log", tex: "\\log", func: true }, { asciimath: "ln", tex: "\\ln", func: true }, { asciimath: "abs", rewriteleftright: ["|", "|"] }, { asciimath: "norm", rewriteleftright: ["\\|", "\\|"] }, { asciimath: "floor", rewriteleftright: ["\\lfloor", "\\rfloor"] }, { asciimath: "ceil", rewriteleftright: ["\\lceil", "\\rceil"] }, { asciimath: "Sin", tex: "\\Sin", func: true }, { asciimath: "Cos", tex: "\\Cos", func: true }, { asciimath: "Tan", tex: "\\Tan", func: true }, { asciimath: "Arcsin", tex: "\\Arcsin", func: true }, { asciimath: "Arccos", tex: "\\Arccos", func: true }, { asciimath: "Arctan", tex: "\\Arctan", func: true }, { asciimath: "Sinh", tex: "\\Sinh", func: true }, { asciimath: "Cosh", tex: "\\Cosh", func: true }, { asciimath: "Tanh", tex: "\\Tanh", func: true }, { asciimath: "Cot", tex: "\\Cot", func: true }, { asciimath: "Sec", tex: "\\Sec", func: true }, { asciimath: "Csc", tex: "\\Csc", func: true }, { asciimath: "Log", tex: "\\Log", func: true }, { asciimath: "Ln", tex: "\\Ln", func: true }, { asciimath: "Abs", tex: "\\Abs", rewriteleftright: ["|", "|"] }, { asciimath: "det", tex: "\\det", func: true }, { asciimath: "exp", tex: "\\exp", func: true }, { asciimath: "gcd", tex: "\\gcd", func: true }, { asciimath: "lcm", tex: "\\operatorname{lcm}", func: true }, { asciimath: "cancel", tex: "\\cancel" }, { asciimath: "Sqrt", tex: "\\Sqrt" }, { asciimath: "hat", tex: "\\hat", acc: true }, { asciimath: "bar", tex: "\\overline", acc: true }, { asciimath: "overline", tex: "\\overline", acc: true }, { asciimath: "vec", tex: "\\vec", acc: true }, { asciimath: "tilde", tex: "\\tilde", acc: true }, { asciimath: "dot", tex: "\\dot", acc: true }, { asciimath: "ddot", tex: "\\ddot", acc: true }, { asciimath: "ul", tex: "\\underline", acc: true }, { asciimath: "underline", tex: "\\underline", acc: true }, { asciimath: "ubrace", tex: "\\underbrace", acc: true }, { asciimath: "underbrace", tex: "\\underbrace", acc: true }, { asciimath: "obrace", tex: "\\overbrace", acc: true }, { asciimath: "overbrace", tex: "\\overbrace", acc: true }, { asciimath: "bb", atname: "mathvariant", atval: "bold", tex: "\\mathbf" }, { asciimath: "mathbf", atname: "mathvariant", atval: "bold", tex: "mathbf" }, { asciimath: "sf", atname: "mathvariant", atval: "sans-serif", tex: "\\mathsf" }, { asciimath: "mathsf", atname: "mathvariant", atval: "sans-serif", tex: "mathsf" }, { asciimath: "bbb", atname: "mathvariant", atval: "double-struck", tex: "\\mathbb" }, { asciimath: "mathbb", atname: "mathvariant", atval: "double-struck", tex: "\\mathbb" }, { asciimath: "cc", atname: "mathvariant", atval: "script", tex: "\\mathcal" }, { asciimath: "mathcal", atname: "mathvariant", atval: "script", tex: "\\mathcal" }, { asciimath: "tt", atname: "mathvariant", atval: "monospace", tex: "\\mathtt" }, { asciimath: "mathtt", atname: "mathvariant", atval: "monospace", tex: "\\mathtt" }, { asciimath: "fr", atname: "mathvariant", atval: "fraktur", tex: "\\mathfrak" }, { asciimath: "mathfrak", atname: "mathvariant", atval: "fraktur", tex: "\\mathfrak" }], this.binary_symbols = [{ asciimath: "root", tex: "\\sqrt", option: true }, { asciimath: "frac", tex: "\\frac" }, { asciimath: "stackrel", tex: "\\stackrel" }, { asciimath: "overset", tex: "\\overset" }, { asciimath: "underset", tex: "\\underset" }, { asciimath: "color", tex: "\\color", rawfirst: true }], this.non_constant_symbols = ["_", "^", "/"];
+  }, a2.sort_symbols = function() {
+    var t3 = function(t4, e2) {
+      return (t4 = t4.asciimath.length) > (e2 = e2.asciimath.length) ? -1 : t4 < e2 ? 1 : 0;
+    };
+    this.constants.sort(t3), this.relations.sort(t3), this.left_brackets.sort(t3), this.right_brackets.sort(t3), this.leftright_brackets.sort(t3), this.unary_symbols.sort(t3), this.binary_symbols.sort(t3);
+  }, a2.error = function(t3, e2) {
+    var a3 = this.source(e2).slice(0, 5);
+    throw new Error("Error at character " + e2 + ' near "' + a3 + '": ' + t3);
+  }, a2.literal = function(t3) {
+    if (t3) return { tex: t3.token, pos: t3.pos, end: t3.end, ttype: "literal" };
+  }, a2.longest = function(t3) {
+    return (t3 = t3.filter(function(t4) {
+      return !!t4;
+    })).sort(function(t4, e2) {
+      return (t4 = t4.end) > (e2 = e2.end) ? -1 : t4 < e2 ? 1 : 0;
+    }), t3[0];
+  }, a2.escape_text = function(t3) {
+    return t3.replace(/\{/g, "\\{").replace(/\}/g, "\\}");
+  }, a2.input = function(t3) {
+    this._source = t3, this.brackets = [];
+  }, a2.source = function(t3, e2) {
+    return void 0 === t3 && (t3 = 0), arguments.length > 1 ? this._source.slice(t3, e2) : this._source.slice(t3);
+  }, a2.eof = function(t3) {
+    return void 0 === t3 && (t3 = 0), (t3 = this.strip_space(t3)) == this._source.length;
+  }, a2.unbracket = function(t3) {
+    if (t3) {
+      if (!t3.bracket) return t3;
+      var e2 = ["(", ")", "[", "]", "{", "}"], a3 = e2.includes(t3.left.asciimath), i = e2.includes(t3.right.asciimath), s = a3 ? "" : t3.left.tex, r = i ? "" : t3.right.tex, c = t3.middle ? t3.middle.tex : "";
+      return s || r ? { tex: "\\left " + (s = s || ".") + " " + c + " \\right " + (r = r || "."), pos: t3.pos, end: t3.end } : { tex: c, pos: t3.pos, end: t3.end, middle_asciimath: this.source(a3 ? t3.left.end : t3.pos, i ? t3.right.pos : t3.end) };
+    }
+  }, a2.parse = function(t3) {
+    return this.input(t3), this.consume().tex;
+  }, a2.consume = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var e2 = "", a3 = []; !this.eof(t3); ) {
+      var i = this.expression_list(t3);
+      if (!i) {
+        var s = this.right_bracket(t3);
+        s && (s.def.free_tex && (s.tex = s.def.free_tex), i = s);
+        var r = this.leftright_bracket(t3);
+        if (r) {
+          i = r;
+          var c = this.subsup(r.end);
+          c && (i = { tex: "" + i.tex + c.tex, pos: t3, end: c.end, ttype: "expression" });
+        }
+      }
+      if (i) e2 && (e2 += " "), e2 += i.tex, t3 = i.end, a3.push(i);
+      else if (!this.eof(t3)) {
+        var n = this.source(t3, t3 + 1);
+        a3.push({ tex: n, pos: t3, ttype: "character" }), e2 += n, t3 += 1;
+      }
+    }
+    return { tex: e2, exprs: a3 };
+  }, a2.strip_space = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.source(t3), a3 = e2.replace(/^(\s|\\(?![\\ ]))*/, "");
+    return t3 + e2.length - a3.length;
+  }, a2.match = function(t3, e2) {
+    e2 = this.strip_space(e2);
+    var a3 = t3.exec(this.source(e2));
+    if (a3) {
+      var i = a3[0];
+      return { token: i, pos: e2, match: a3, end: e2 + i.length, ttype: "regex" };
+    }
+  }, a2.exact = function(t3, e2) {
+    if (e2 = this.strip_space(e2), this.source(e2).slice(0, t3.length) == t3) return { token: t3, pos: e2, end: e2 + t3.length, ttype: "exact" };
+  }, a2.expression_list = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.expression(t3);
+    if (e2) {
+      for (var a3 = e2.end, i = e2.tex, s = [e2]; !this.eof(a3); ) {
+        var r = this.exact(",", a3);
+        if (!r) break;
+        if (i += " ,", !(e2 = this.expression(a3 = r.end))) break;
+        i += " " + e2.tex, s.push(e2), a3 = e2.end;
+      }
+      return { tex: i, pos: t3, end: a3, exprs: s, ttype: "expression_list" };
+    }
+  }, a2.expression = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var a3 = this.negative_expression(t3);
+    if (a3) return a3;
+    var i = this.intermediate_or_fraction(t3);
+    if (i) {
+      if (this.eof(i.end)) return i;
+      var s = this.expression(i.end);
+      return s ? { tex: i.tex + " " + s.tex, pos: i.pos, end: s.end, ttype: "expression", exprs: [i, s] } : i;
+    }
+    for (var r, c = e(this.non_constant_symbols); !(r = c()).done; ) {
+      var n = r.value, h = this.exact(n, t3);
+      if (h) return { tex: n, pos: t3, end: h.end, ttype: "constant" };
+    }
+  }, a2.negative_expression = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.exact("-", t3);
+    if (e2 && !this.other_constant(t3)) {
+      var a3 = this.expression(e2.end);
+      return a3 ? { tex: "- " + a3.tex, pos: t3, end: a3.end, ttype: "negative_expression", dash: e2, expression: a3 } : { tex: "-", pos: t3, end: e2.end, ttype: "constant" };
+    }
+  }, a2.intermediate_or_fraction = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.intermediate(t3);
+    if (e2) {
+      var a3 = this.match(/^\/(?!\/)/, e2.end);
+      if (a3) {
+        var i = this.intermediate(a3.end);
+        if (i) {
+          var s = this.unbracket(e2), r = this.unbracket(i);
+          return { tex: "\\frac{" + s.tex + "}{" + r.tex + "}", pos: e2.pos, end: i.end, ttype: "fraction", numerator: s, denominator: r, raw_numerator: e2, raw_denominator: i };
+        }
+        var c = this.unbracket(e2);
+        return { tex: "\\frac{" + c.tex + "}{}", pos: e2.pos, end: a3.end, ttype: "fraction", numerator: c, denominator: null, raw_numerator: e2, raw_denominator: null };
+      }
+      return e2;
+    }
+  }, a2.intermediate = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.simple(t3);
+    if (e2) {
+      var a3 = this.subsup(e2.end);
+      return a3 ? { tex: "" + e2.tex + a3.tex, pos: t3, end: a3.end, ttype: "intermediate", expression: e2, subsup: a3 } : e2;
+    }
+  }, a2.subsup = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2, a3, i = "", s = t3, r = this.exact("_", t3);
+    r && ((e2 = this.unbracket(this.simple(r.end))) ? (i = i + "_{" + e2.tex + "}", s = e2.end) : (i += "_{}", s = r.end));
+    var c = this.match(/^\^(?!\^)/, s);
+    if (c && ((a3 = this.unbracket(this.simple(c.end))) ? (i = i + "^{" + a3.tex + "}", s = a3.end) : (i += "^{}", s = c.end)), r || c) return { tex: i, pos: t3, end: s, ttype: "subsup", sub: e2, sup: a3 };
+  }, a2.simple = function(t3) {
+    return void 0 === t3 && (t3 = 0), this.longest([this.matrix(t3), this.bracketed_expression(t3), this.binary(t3), this.constant(t3), this.text(t3), this.unary(t3), this.negative_simple(t3)]);
+  }, a2.negative_simple = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.exact("-", t3);
+    if (e2 && !this.other_constant(t3)) {
+      var a3 = this.simple(e2.end);
+      return a3 ? { tex: "- " + a3.tex, pos: t3, end: a3.end, ttype: "negative_simple", dash: e2, expr: a3 } : { tex: "-", pos: t3, end: e2.end, ttype: "constant" };
+    }
+  }, a2.matrix = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.left_bracket(t3), a3 = false;
+    if (!e2) {
+      if (!(e2 = this.leftright_bracket(t3, "left"))) return;
+      a3 = true;
+    }
+    var i = this.matrix_contents(e2.end, a3);
+    if (i) {
+      var s = a3 ? this.leftright_bracket(i.end, "right") : this.right_bracket(i.end);
+      if (s) {
+        var r = i.rows.map(function(t4) {
+          return t4.tex;
+        }).join(" \\\\ ");
+        return { tex: "\\left " + e2.tex + " " + (i.is_array ? "\\begin{array}{" + i.column_desc + "} " + r + " \\end{array}" : "\\begin{matrix} " + r + " \\end{matrix}") + " \\right " + s.tex, pos: t3, end: s.end, ttype: "matrix", rows: i.rows, left: e2, right: s };
+      }
+    }
+  }, a2.matrix_contents = function(t3, e2) {
+    void 0 === t3 && (t3 = 0), void 0 === e2 && (e2 = false);
+    for (var a3 = [], i = t3, s = void 0, r = void 0, c = false; !this.eof(i) && !(e2 ? this.leftright_bracket(i) : this.right_bracket(i)); ) {
+      if (a3.length) {
+        var n = this.exact(",", i);
+        if (!n) return;
+        i = n.end;
+      }
+      var h = this.match(/^[(\[]/, i);
+      if (!h) return;
+      var o = [], m = [];
+      for (i = h.end; !this.eof(i); ) {
+        if (o.length) {
+          var x = this.exact(",", i);
+          if (!x) break;
+          i = x.end;
+        }
+        var l = this.matrix_cell(i);
+        if (!l) break;
+        "column" == l.ttype ? (m.push("|"), c = true, null !== l.expr && (m.push("r"), o.push(l.expr))) : (m.push("r"), o.push(l)), i = l.end;
+      }
+      if (!o.length) return;
+      if (void 0 === s) s = o.length;
+      else if (o.length != s) return;
+      var d = this.match(/^[)\]]/, i);
+      if (!d) return;
+      var u = m.join("");
+      if (void 0 === r) r = u;
+      else if (u != r) return;
+      a3.push({ ttype: "row", tex: o.map(function(t4) {
+        return t4.tex;
+      }).join(" & "), pos: h.end, end: i, cells: o }), i = d.end;
+    }
+    if (!(void 0 === s || s <= 1 && a3.length <= 1)) return { rows: a3, end: i, column_desc: r, is_array: c };
+  }, a2.matrix_cell = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.exact("|", t3);
+    if (e2) {
+      var a3 = this.expression(e2.end);
+      if (!a3) return { ttype: "column", expr: null, pos: e2.pos, end: e2.end };
+      var i = this.exact("|", a3.end);
+      if (!i) return { ttype: "column", expr: a3, pos: e2.pos, end: a3.end };
+      var s = this.expression(i.end);
+      if (s) return { tex: "\\left \\lvert " + a3.tex + " \\right \\rvert " + s.text, pos: e2.pos, end: s.end, ttype: "expression", exprs: [a3, s] };
+    }
+    return this.expression(t3);
+  }, a2.bracketed_expression = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.left_bracket(t3);
+    if (e2) {
+      var a3 = this.expression_list(e2.end);
+      if (a3) {
+        var i = this.mid_expression(e2, a3, t3);
+        if (i) return i;
+        var s = this.right_bracket(a3.end) || this.leftright_bracket(a3.end, "right");
+        return s ? { tex: "\\left " + e2.tex + " " + a3.tex + " \\right " + s.tex, pos: t3, end: s.end, bracket: true, left: e2, right: s, middle: a3, ttype: "bracket" } : this.eof(a3.end) ? { tex: "\\left " + e2.tex + " " + a3.tex + " \\right.", pos: t3, end: a3.end, ttype: "bracket", left: e2, right: null, middle: a3 } : { tex: e2.tex + " " + a3.tex, pos: t3, end: a3.end, ttype: "expression", exprs: [e2, a3] };
+      }
+      var r = this.right_bracket(e2.end) || this.leftright_bracket(e2.end, "right");
+      return r ? { tex: "\\left " + e2.tex + " \\right " + r.tex, pos: t3, end: r.end, bracket: true, left: e2, right: r, middle: null, ttype: "bracket" } : { tex: e2.tex, pos: t3, end: e2.end, ttype: "constant" };
+    }
+    if (!this.other_constant(t3)) {
+      var c = this.leftright_bracket(t3, "left");
+      if (c) {
+        var n = this.expression_list(c.end);
+        if (n) {
+          var h = this.mid_expression(c, n, t3);
+          if (h) return h;
+          var o = this.leftright_bracket(n.end, "right") || this.right_bracket(n.end);
+          if (o) return { tex: "\\left " + c.tex + " " + n.tex + " \\right " + o.tex, pos: t3, end: o.end, bracket: true, left: c, right: o, middle: n, ttype: "bracket" };
+        }
+      }
+    }
+  }, a2.mid_expression = function(t3, e2, a3) {
+    if (1 == e2.exprs.length && "expression" == e2.exprs[0].ttype) {
+      for (var i = [e2.exprs[0].exprs[0]], s = e2.exprs[0].exprs[1], r = e2.end; "expression" == s.ttype; ) {
+        var c = s.exprs[0];
+        if ("bracket" == (x = c).ttype && "leftright_bracket" == x.left.ttype) {
+          s = c, r = c.end;
+          break;
+        }
+        i.push(s.exprs[0]), s = s.exprs[1];
+      }
+      if ("fraction" == s.ttype && (r = (s = s.raw_numerator).end), "bracket" != s.ttype || "leftright_bracket" != s.left.ttype) return;
+      var n = i.map(function(t4) {
+        return t4.tex;
+      }).join(" "), h = s.left, o = s.middle.exprs.map(function(t4) {
+        return t4.tex;
+      }).join(" "), m = s.right;
+      return { tex: "\\left " + t3.tex + " " + n + " " + h.def.mid_tex + " " + o + " \\right " + m.tex, pos: a3, end: r, left: t3, right: m, middle: { tex: n + " " + h.def.mid_tex + " " + o, exprs: i.concat([h, s.middle]), pos: e2.pos, end: s.middle.end, ttype: "expression_list" } };
+    }
+    var x;
+  }, a2.right_bracket = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var a3, i = e(this.right_brackets); !(a3 = i()).done; ) {
+      var s = a3.value, r = this.exact(s.asciimath, t3);
+      if (r) return { tex: s.tex, pos: t3, end: r.end, asciimath: s.asciimath, def: s, ttype: "right_bracket" };
+    }
+  }, a2.left_bracket = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var a3, i = e(this.left_brackets); !(a3 = i()).done; ) {
+      var s = a3.value, r = this.exact(s.asciimath, t3);
+      if (r) return { tex: s.tex, pos: t3, end: r.end, asciimath: s.asciimath, ttype: "left_bracket" };
+    }
+  }, a2.leftright_bracket = function(t3, a3) {
+    void 0 === t3 && (t3 = 0);
+    for (var i, s = e(this.leftright_brackets); !(i = s()).done; ) {
+      var r = i.value, c = this.exact(r.asciimath, t3);
+      if (c) return this.exact(",", c.end) ? { tex: r.free_tex, pos: t3, end: c.end, ttype: "binary" } : { tex: "left" == a3 ? r.left_tex : "right" == a3 ? r.right_tex : r.free_tex, pos: t3, end: c.end, ttype: "leftright_bracket", def: r };
+    }
+  }, a2.text = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = this.match(/^"([^"]*)"/, t3);
+    if (e2) {
+      var a3 = this.escape_text(e2.match[1]);
+      return { tex: "\\text{" + a3 + "}", pos: t3, end: e2.end, ttype: "text", text: a3 };
+    }
+    var i = this.match(/^(?:mbox|text)\s*(\([^)]*\)?|\{[^}]*\}?|\[[^\]]*\]?)/, t3);
+    if (i) {
+      var s = this.escape_text(i.match[1].slice(1, i.match[1].length - 1));
+      return { tex: "\\text{" + s + "}", pos: t3, end: i.end, ttype: "text", text: s };
+    }
+  }, a2.binary = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var a3, i = e(this.binary_symbols); !(a3 = i()).done; ) {
+      var s = a3.value, r = this.exact(s.asciimath, t3), c = s.option ? ["[", "]"] : ["{", "}"], n = c[0], h = c[1];
+      if (r) {
+        var o = this.unbracket(this.simple(r.end));
+        if (o) {
+          var m = s.rawfirst ? o.middle_asciimath : o.tex, x = this.unbracket(this.simple(o.end));
+          return x ? { tex: "" + s.tex + n + m + h + "{" + x.tex + "}", pos: t3, end: x.end, ttype: "binary", op: s, arg1: o, arg2: x } : { tex: "" + s.tex + n + m + h + "{}", pos: t3, end: o.end, ttype: "binary", op: s, arg1: o, arg2: null };
+        }
+        return { tex: "" + s.tex + n + h + "{}", pos: t3, end: r.end, ttype: "binary", op: s, arg1: null, arg2: null };
+      }
+    }
+  }, a2.unary = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var a3, i = e(this.unary_symbols); !(a3 = i()).done; ) {
+      var s = a3.value, r = this.exact(s.asciimath, t3);
+      if (r) {
+        var c = this.subsup(r.end), n = c ? c.tex : "", h = this.simple(c ? c.end : r.end), o = s.func ? h : this.unbracket(h), m = o && (s.raw ? o.middle_asciimath : o.tex);
+        if (s.rewriteleftright) {
+          var x = s.rewriteleftright, l = x[0], d = x[1];
+          return o ? { tex: "\\left " + l + " " + m + " \\right " + d + " " + n, pos: t3, end: o.end, ttype: "unary", op: r, subsup: c, arg: o } : { tex: "\\left " + l + " \\right " + d + " " + n, pos: t3, end: r.end, ttype: "unary", op: r, subsup: c, arg: null };
+        }
+        return o ? { tex: "" + s.tex + n + "{" + m + "}", pos: t3, end: o.end, ttype: "unary", op: r, subsup: c, arg: o } : { tex: "" + s.tex + n + "{}", pos: t3, end: r.end, ttype: "unary", op: r, subsup: c, arg: null };
+      }
+    }
+  }, a2.constant = function(t3) {
+    if (void 0 === t3 && (t3 = 0), !this.right_bracket(t3)) return this.longest([this.other_constant(t3), this.greek(t3), this.name(t3), this.number(t3), this.arbitrary_constant(t3)]);
+  }, a2.name = function(t3) {
+    return void 0 === t3 && (t3 = 0), this.literal(this.match(/^[A-Za-z]/, t3));
+  }, a2.greek = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = new RegExp("^(" + this.greek_letters.join("|") + ")"), a3 = this.match(e2, t3);
+    if (a3) return { tex: "\\" + a3.token, pos: t3, end: a3.end, ttype: "greek" };
+  }, a2.number = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    var e2 = new RegExp("^\\d+(" + this.decimalsign + "\\d+)?");
+    return this.literal(this.match(e2, t3));
+  }, a2.other_constant = function(t3) {
+    void 0 === t3 && (t3 = 0);
+    for (var a3, i = e(this.constants); !(a3 = i()).done; ) {
+      var s = a3.value, r = this.exact(s.asciimath, t3);
+      if (r) return { tex: "" + s.tex, pos: r.pos, end: r.end, ttype: "other_constant" };
+    }
+    for (var c, n = e(this.relations); !(c = n()).done; ) {
+      var h = c.value;
+      if (!h.asciimath.match(/^!/)) {
+        var o = this.exact("!" + h.asciimath, t3);
+        if (o) return { tex: "\\not " + h.tex, pos: o.pos, end: o.end, ttype: "other_constant" };
+      }
+    }
+  }, a2.arbitrary_constant = function(t3) {
+    if (void 0 === t3 && (t3 = 0), !this.eof(t3)) {
+      if (this.exact(",", t3)) return;
+      for (var a3, i = e(this.non_constant_symbols.concat(this.left_brackets.map(function(t4) {
+        return t4.asciimath;
+      }), this.right_brackets.map(function(t4) {
+        return t4.asciimath;
+      }), this.leftright_brackets.map(function(t4) {
+        return t4.asciimath;
+      }))); !(a3 = i()).done; ) if (this.exact(a3.value, t3)) return;
+      var s = this.strip_space(t3);
+      return { tex: this.source(s).slice(0, 1), pos: t3, end: s + 1, ttype: "arbitrary_constant" };
+    }
+  }, t2;
+}();
+
 // node_modules/@asciidoctor/core/dist/browser/asciidoctor.js
 (function(global_object) {
   "use strict";
@@ -211,9 +584,9 @@ var import_obsidian = require("obsidian");
       cref.$$autoload[name].loaded = true;
       try {
         Opal2.Kernel.$require(cref.$$autoload[name].path);
-      } catch (e) {
-        cref.$$autoload[name].exception = e;
-        throw e;
+      } catch (e2) {
+        cref.$$autoload[name].exception = e2;
+        throw e2;
       }
       cref.$$autoload[name].required = true;
       if (cref.$$const[name] != null) {
@@ -1280,7 +1653,7 @@ var import_obsidian = require("obsidian");
     };
     try {
       Object.defineProperty(alias, "length", { value: body.length });
-    } catch (e) {
+    } catch (e2) {
     }
     alias.displayName = name;
     alias.$$arity = body.$$arity == null ? body.length : body.$$arity;
@@ -1994,11 +2367,11 @@ Opal.modules["corelib/helpers"] = function(Opal2) {
       }
       ;
     });
-    $defs(self, "$compare", function $$compare(a, b) {
+    $defs(self, "$compare", function $$compare(a2, b) {
       var compare = nil;
-      compare = a["$<=>"](b);
+      compare = a2["$<=>"](b);
       if ($truthy(compare === nil)) {
-        $Kernel.$raise($$$("ArgumentError"), "comparison of " + a.$class() + " with " + b.$class() + " failed");
+        $Kernel.$raise($$$("ArgumentError"), "comparison of " + a2.$class() + " with " + b.$class() + " failed");
       }
       ;
       return compare;
@@ -2075,7 +2448,7 @@ Opal.modules["corelib/helpers"] = function(Opal2) {
     }, -2);
     var inspect_stack = [];
     return $defs(self, "$inspect", function $$inspect(value) {
-      var e = nil;
+      var e2 = nil;
       ;
       var pushed = false;
       return function() {
@@ -2100,7 +2473,7 @@ Opal.modules["corelib/helpers"] = function(Opal2) {
             return nil;
           } catch ($err) {
             if (Opal2.rescue($err, [$$$("Exception")])) {
-              e = $err;
+              e2 = $err;
               try {
                 return "#<" + value.$$class + ":0x" + value.$__id__().$to_s(16) + ">";
               } finally {
@@ -2492,9 +2865,9 @@ Opal.modules["corelib/module"] = function(Opal2) {
             target.$$jsid = name;
             try {
               return target.apply(self3, args);
-            } catch (e) {
-              if (e === target.$$brk || e === target.$$ret) return e.$v;
-              throw e;
+            } catch (e2) {
+              if (e2 === target.$$brk || e2 === target.$$ret) return e2.$v;
+              throw e2;
             } finally {
               target.$$jsid = old_name;
             }
@@ -3384,7 +3757,7 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
     $def(self, "$initialize_copy", $return_val(nil));
     var inspect_stack = [];
     $def(self, "$inspect", function $$inspect() {
-      var self2 = this, ivs = nil, id = nil, pushed = nil, e = nil;
+      var self2 = this, ivs = nil, id = nil, pushed = nil, e2 = nil;
       return function() {
         try {
           try {
@@ -3407,7 +3780,7 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
             return "#<" + self2.$class() + ":0x" + id.$to_s(16) + ivs + ">";
           } catch ($err) {
             if (Opal2.rescue($err, [$$("StandardError")])) {
-              e = $err;
+              e2 = $err;
               try {
                 return "#<" + self2.$class() + ":0x" + id.$to_s(16) + ">";
               } finally {
@@ -3604,7 +3977,7 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
       return Opal2.load(file);
     });
     $def(self, "$loop", function $$loop() {
-      var $yield = $$loop.$$p || nil, self2 = this, e = nil;
+      var $yield = $$loop.$$p || nil, self2 = this, e2 = nil;
       $$loop.$$p = null;
       if (!($yield !== nil)) {
         return $send(self2, "enum_for", ["loop"], function $$12() {
@@ -3617,9 +3990,9 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
           Opal2.yieldX($yield, []);
         } catch ($err) {
           if (Opal2.rescue($err, [$$$("StopIteration")])) {
-            e = $err;
+            e2 = $err;
             try {
-              return e.$result();
+              return e2.$result();
             } finally {
               Opal2.pop_exception();
             }
@@ -3845,8 +4218,8 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
       } : function() {
         return /* @__PURE__ */ new Date();
       };
-      var t = get_time();
-      while (get_time() - t <= seconds * 1e3) ;
+      var t2 = get_time();
+      while (get_time() - t2 <= seconds * 1e3) ;
       return Math.round(seconds);
       ;
     }, -1);
@@ -3875,7 +4248,7 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
       return "#<" + self2.$class() + ":0x" + self2.$__id__().$to_s(16) + ">";
     });
     $def(self, "$catch", function $Kernel_catch$17(tag) {
-      var $yield = $Kernel_catch$17.$$p || nil, $ret_or_1 = nil, e = nil;
+      var $yield = $Kernel_catch$17.$$p || nil, $ret_or_1 = nil, e2 = nil;
       $Kernel_catch$17.$$p = null;
       if (tag == null) tag = nil;
       try {
@@ -3884,10 +4257,10 @@ Opal.modules["corelib/kernel"] = function(Opal2) {
         ;
       } catch ($err) {
         if (Opal2.rescue($err, [$$$("UncaughtThrowError")])) {
-          e = $err;
+          e2 = $err;
           try {
-            if ($eqeq(e.$tag(), tag)) {
-              return e.$value();
+            if ($eqeq(e2.$tag(), tag)) {
+              return e2.$value();
             }
             ;
             return $Kernel.$raise();
@@ -5063,12 +5436,12 @@ Opal.modules["corelib/regexp"] = function(Opal2) {
       var $post_args, args, self2 = this;
       $post_args = $slice(arguments);
       args = $post_args;
-      var i, a, index, values = [];
+      var i, a2, index, values = [];
       for (i = 0; i < args.length; i++) {
         if (args[i].$$is_range) {
-          a = args[i].$to_a();
-          a.unshift(i, 1);
-          Array.prototype.splice.apply(args, a);
+          a2 = args[i].$to_a();
+          a2.unshift(i, 1);
+          Array.prototype.splice.apply(args, a2);
         }
         index = $Opal["$coerce_to!"](args[i], $$$("Integer"), "to_int");
         if (index < 0) {
@@ -5477,11 +5850,11 @@ Opal.modules["corelib/string"] = function(Opal2) {
         return self3;
       }
       separator = $coerce_to(separator, $$$("String"), "to_str");
-      var a, i, n, length, chomped, trailing, splitted, value;
+      var a2, i, n, length, chomped, trailing, splitted, value;
       if (separator.length === 0) {
-        for (a = self3.split(/((?:\r?\n){2})(?:(?:\r?\n)*)/), i = 0, n = a.length; i < n; i += 2) {
-          if (a[i] || a[i + 1]) {
-            value = (a[i] || "") + (a[i + 1] || "");
+        for (a2 = self3.split(/((?:\r?\n){2})(?:(?:\r?\n)*)/), i = 0, n = a2.length; i < n; i += 2) {
+          if (a2[i] || a2[i + 1]) {
+            value = (a2[i] || "") + (a2[i + 1] || "");
             if (chomp) {
               value = value.$chomp("\n");
             }
@@ -5683,7 +6056,7 @@ Opal.modules["corelib/string"] = function(Opal2) {
     });
     $alias(self2, "size", "length");
     $def(self2, "$lines", function $$lines($a, $b) {
-      var block = $$lines.$$p || nil, $post_args, $kwargs, separator, chomp, self3 = this, e = nil;
+      var block = $$lines.$$p || nil, $post_args, $kwargs, separator, chomp, self3 = this, e2 = nil;
       if ($gvars["/"] == null) $gvars["/"] = nil;
       $$lines.$$p = null;
       ;
@@ -5694,11 +6067,11 @@ Opal.modules["corelib/string"] = function(Opal2) {
       if (separator == null) separator = $gvars["/"];
       chomp = $kwargs.$$smap["chomp"];
       if (chomp == null) chomp = false;
-      e = $send(self3, "each_line", [separator, $hash2(["chomp"], { "chomp": chomp })], block.$to_proc());
+      e2 = $send(self3, "each_line", [separator, $hash2(["chomp"], { "chomp": chomp })], block.$to_proc());
       if ($truthy(block)) {
         return self3;
       } else {
-        return e.$to_a();
+        return e2.$to_a();
       }
       ;
     }, -1);
@@ -6592,27 +6965,27 @@ Opal.modules["corelib/string"] = function(Opal2) {
         return self3.$enum_for("upto", stop, excl);
       }
       ;
-      var a, b, s = self3.toString();
+      var a2, b, s = self3.toString();
       stop = $coerce_to(stop, $$$("String"), "to_str");
       if (s.length === 1 && stop.length === 1) {
-        a = s.charCodeAt(0);
+        a2 = s.charCodeAt(0);
         b = stop.charCodeAt(0);
-        while (a <= b) {
-          if (excl && a === b) {
+        while (a2 <= b) {
+          if (excl && a2 === b) {
             break;
           }
-          block(String.fromCharCode(a));
-          a += 1;
+          block(String.fromCharCode(a2));
+          a2 += 1;
         }
       } else if (parseInt(s, 10).toString() === s && parseInt(stop, 10).toString() === stop) {
-        a = parseInt(s, 10);
+        a2 = parseInt(s, 10);
         b = parseInt(stop, 10);
-        while (a <= b) {
-          if (excl && a === b) {
+        while (a2 <= b) {
+          if (excl && a2 === b) {
             break;
           }
-          block(a.toString());
-          a += 1;
+          block(a2.toString());
+          a2 += 1;
         }
       } else {
         while (s.length <= stop.length && s <= stop) {
@@ -7652,10 +8025,10 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
       if (n == null) n = nil;
       if (!$truthy(n["$nil?"]())) {
         if (block !== nil) {
-          return $send(self2, "sort", [], function $$36(a, b) {
-            if (a == null) a = nil;
+          return $send(self2, "sort", [], function $$36(a2, b) {
+            if (a2 == null) a2 = nil;
             if (b == null) b = nil;
-            return Opal2.yieldX(block, [a, b]);
+            return Opal2.yieldX(block, [a2, b]);
             ;
           }).$take(n);
         } else {
@@ -7732,10 +8105,10 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
       var block = $$minmax.$$p || nil, self2 = this, $ret_or_1 = nil;
       $$minmax.$$p = null;
       ;
-      block = $truthy($ret_or_1 = block) ? $ret_or_1 : $send($Kernel, "proc", [], function $$38(a, b) {
-        if (a == null) a = nil;
+      block = $truthy($ret_or_1 = block) ? $ret_or_1 : $send($Kernel, "proc", [], function $$38(a2, b) {
+        if (a2 == null) a2 = nil;
         if (b == null) b = nil;
-        return a["$<=>"](b);
+        return a2["$<=>"](b);
       });
       var min = nil, max = nil, first_time = true;
       self2.$each.$$p = function() {
@@ -7992,16 +8365,16 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
         $Kernel.$raise($$$("ArgumentError"), "wrong number of arguments (" + arguments.length + " expected 1)");
       }
       ;
-      return $send($$$("Enumerator"), "new", [], function $$51(e) {
+      return $send($$$("Enumerator"), "new", [], function $$51(e2) {
         var self3 = $$51.$$s == null ? this : $$51.$$s;
-        if (e == null) e = nil;
+        if (e2 == null) e2 = nil;
         var slice = [];
         if (block !== nil) {
           if (pattern === void 0) {
             self3.$each.$$p = function() {
               var param = $Opal.$destructure(arguments), value = $yield1(block, param);
               if ($truthy(value) && slice.length > 0) {
-                e["$<<"](slice);
+                e2["$<<"](slice);
                 slice = [];
               }
               slice.push(param);
@@ -8010,7 +8383,7 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
             self3.$each.$$p = function() {
               var param = $Opal.$destructure(arguments), value = block(param, pattern.$dup());
               if ($truthy(value) && slice.length > 0) {
-                e["$<<"](slice);
+                e2["$<<"](slice);
                 slice = [];
               }
               slice.push(param);
@@ -8020,7 +8393,7 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
           self3.$each.$$p = function() {
             var param = $Opal.$destructure(arguments), value = pattern["$==="](param);
             if ($truthy(value) && slice.length > 0) {
-              e["$<<"](slice);
+              e2["$<<"](slice);
               slice = [];
             }
             slice.push(param);
@@ -8028,7 +8401,7 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
         }
         self3.$each();
         if (slice.length > 0) {
-          e["$<<"](slice);
+          e2["$<<"](slice);
         }
         ;
       }, { $$s: self2 });
@@ -8047,9 +8420,9 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
       }
       ;
       if ($truthy(pattern !== void 0)) {
-        block = $send($Kernel, "proc", [], function $$52(e) {
-          if (e == null) e = nil;
-          return pattern["$==="](e);
+        block = $send($Kernel, "proc", [], function $$52(e2) {
+          if (e2 == null) e2 = nil;
+          return pattern["$==="](e2);
         });
       }
       ;
@@ -8117,10 +8490,10 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
       ;
       ary = self2.$to_a();
       if (!(block !== nil)) {
-        block = $lambda(function $$55(a, b) {
-          if (a == null) a = nil;
+        block = $lambda(function $$55(a2, b) {
+          if (a2 == null) a2 = nil;
           if (b == null) b = nil;
-          return a["$<=>"](b);
+          return a2["$<=>"](b);
         });
       }
       ;
@@ -8142,10 +8515,10 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
         arg = $Opal.$destructure(arguments);
         return [Opal2.yield1(block, arg), arg];
       });
-      $send(dup, "sort!", [], function $$58(a, b) {
-        if (a == null) a = nil;
+      $send(dup, "sort!", [], function $$58(a2, b) {
+        if (a2 == null) a2 = nil;
         if (b == null) b = nil;
-        return a[0]["$<=>"](b[0]);
+        return a2[0]["$<=>"](b[0]);
       });
       return $send(dup, "map!", [], function $$59(i) {
         if (i == null) i = nil;
@@ -8160,15 +8533,15 @@ Opal.modules["corelib/enumerable"] = function(Opal2) {
       result = initial;
       compensation = 0;
       $send(self2, "each", [], function $$60($a) {
-        var $post_args, args, item = nil, y = nil, t = nil;
+        var $post_args, args, item = nil, y = nil, t2 = nil;
         $post_args = $slice(arguments);
         args = $post_args;
         item = $yield !== nil ? Opal2.yieldX($yield, $to_a(args)) : $Opal.$destructure(args);
         if ($not([$$$($$$("Float"), "INFINITY"), $$$($$$("Float"), "INFINITY")["$-@"]()]["$include?"](item)) && $truthy(item["$respond_to?"]("-"))) {
           y = $rb_minus(item, compensation);
-          t = $rb_plus(result, y);
-          compensation = $rb_minus($rb_minus(t, result), y);
-          return result = t;
+          t2 = $rb_plus(result, y);
+          compensation = $rb_minus($rb_minus(t2, result), y);
+          return result = t2;
         } else {
           return result = $rb_plus(result, item);
         }
@@ -8616,11 +8989,11 @@ Opal.modules["corelib/enumerator/generator"] = function(Opal2) {
         try {
           args.unshift(yielder);
           Opal2.yieldX(self3.block, args);
-        } catch (e) {
-          if (e && e.$thrower_type == "breaker") {
-            return e.$v;
+        } catch (e2) {
+          if (e2 && e2.$thrower_type == "breaker") {
+            return e2.$v;
           } else {
-            throw e;
+            throw e2;
           }
         }
         ;
@@ -9176,10 +9549,10 @@ Opal.modules["corelib/numeric"] = function(Opal2) {
       return [$Kernel.$Float(other), $Kernel.$Float(self3)];
     });
     $def(self2, "$__coerced__", function $$__coerced__(method, other) {
-      var $a, $b, self3 = this, a = nil, b = nil;
+      var $a, $b, self3 = this, a2 = nil, b = nil;
       if ($truthy(other["$respond_to?"]("coerce"))) {
-        $b = other.$coerce(self3), $a = $to_ary($b), a = $a[0] == null ? nil : $a[0], b = $a[1] == null ? nil : $a[1], $b;
-        return a.$__send__(method, b);
+        $b = other.$coerce(self3), $a = $to_ary($b), a2 = $a[0] == null ? nil : $a[0], b = $a[1] == null ? nil : $a[1], $b;
+        return a2.$__send__(method, b);
       } else
         switch (method) {
           case "+":
@@ -9707,7 +10080,7 @@ Opal.modules["corelib/array"] = function(Opal2) {
       var self3 = this;
       var recursed = {};
       function _eqeq(array, other2) {
-        var i, length, a, b;
+        var i, length, a2, b;
         if (array === other2)
           return true;
         if (!other2.$$is_array) {
@@ -9726,19 +10099,19 @@ Opal.modules["corelib/array"] = function(Opal2) {
         }
         recursed[array.$object_id()] = true;
         for (i = 0, length = array.length; i < length; i++) {
-          a = array[i];
+          a2 = array[i];
           b = other2[i];
-          if (a.$$is_array) {
-            if (b.$$is_array && b.length !== a.length) {
+          if (a2.$$is_array) {
+            if (b.$$is_array && b.length !== a2.length) {
               return false;
             }
-            if (!recursed.hasOwnProperty(a.$object_id())) {
-              if (!_eqeq(a, b)) {
+            if (!recursed.hasOwnProperty(a2.$object_id())) {
+              if (!_eqeq(a2, b)) {
                 return false;
               }
             }
           } else {
-            if (!a["$=="](b)) {
+            if (!a2["$=="](b)) {
               return false;
             }
           }
@@ -10283,10 +10656,10 @@ Opal.modules["corelib/array"] = function(Opal2) {
       var $post_args, arrays, self3 = this;
       $post_args = $slice(arguments);
       arrays = $post_args;
-      return $send(arrays, "reduce", [self3.$to_a().$dup()], function $$24(a, b) {
-        if (a == null) a = nil;
+      return $send(arrays, "reduce", [self3.$to_a().$dup()], function $$24(a2, b) {
+        if (a2 == null) a2 = nil;
         if (b == null) b = nil;
-        return $rb_minus(a, b);
+        return $rb_minus(a2, b);
       });
     }, -1);
     $def(self2, "$dig", function $$dig(idx, $a) {
@@ -10363,7 +10736,7 @@ Opal.modules["corelib/array"] = function(Opal2) {
       var self3 = this;
       var recursed = {};
       function _eql(array, other2) {
-        var i, length, a, b;
+        var i, length, a2, b;
         if (!other2.$$is_array) {
           return false;
         }
@@ -10373,19 +10746,19 @@ Opal.modules["corelib/array"] = function(Opal2) {
         }
         recursed[array.$object_id()] = true;
         for (i = 0, length = array.length; i < length; i++) {
-          a = array[i];
+          a2 = array[i];
           b = other2[i];
-          if (a.$$is_array) {
-            if (b.$$is_array && b.length !== a.length) {
+          if (a2.$$is_array) {
+            if (b.$$is_array && b.length !== a2.length) {
               return false;
             }
-            if (!recursed.hasOwnProperty(a.$object_id())) {
-              if (!_eql(a, b)) {
+            if (!recursed.hasOwnProperty(a2.$object_id())) {
+              if (!_eql(a2, b)) {
                 return false;
               }
             }
           } else {
-            if (!a["$eql?"](b)) {
+            if (!a2["$eql?"](b)) {
               return false;
             }
           }
@@ -10725,10 +11098,10 @@ Opal.modules["corelib/array"] = function(Opal2) {
       var $post_args, arrays, self3 = this;
       $post_args = $slice(arguments);
       arrays = $post_args;
-      return $send(arrays, "reduce", [self3.$to_a().$dup()], function $$31(a, b) {
-        if (a == null) a = nil;
+      return $send(arrays, "reduce", [self3.$to_a().$dup()], function $$31(a2, b) {
+        if (a2 == null) a2 = nil;
         if (b == null) b = nil;
-        return a["$&"](b);
+        return a2["$&"](b);
       });
     }, -1);
     $def(self2, "$intersect?", function $Array_intersect$ques$32(other) {
@@ -11468,8 +11841,8 @@ Opal.modules["corelib/array"] = function(Opal2) {
       }
       ;
       if (block === nil) {
-        block = function(a, b) {
-          return a["$<=>"](b);
+        block = function(a2, b) {
+          return a2["$<=>"](b);
         };
       }
       return self3.slice().sort(function(x, y) {
@@ -11600,10 +11973,10 @@ Opal.modules["corelib/array"] = function(Opal2) {
       var $post_args, arrays, self3 = this;
       $post_args = $slice(arguments);
       arrays = $post_args;
-      return $send(arrays, "reduce", [self3.$uniq()], function $$52(a, b) {
-        if (a == null) a = nil;
+      return $send(arrays, "reduce", [self3.$uniq()], function $$52(a2, b) {
+        if (a2 == null) a2 = nil;
         if (b == null) b = nil;
-        return a["$|"](b);
+        return a2["$|"](b);
       });
     }, -1);
     $def(self2, "$uniq", function $$uniq() {
@@ -13509,14 +13882,14 @@ Opal.modules["corelib/number"] = function(Opal2) {
       return self3 < 0 ? Math.ceil(self3) : Math.floor(self3);
     });
     $def(self2, "$to_r", function $$to_r() {
-      var $a, $b, self3 = this, f = nil, e = nil;
+      var $a, $b, self3 = this, f = nil, e2 = nil;
       if ($eqeqeq($$$("Integer"), self3)) {
         return $$$("Rational").$new(self3, 1);
       } else {
-        $b = $$$("Math").$frexp(self3), $a = $to_ary($b), f = $a[0] == null ? nil : $a[0], e = $a[1] == null ? nil : $a[1], $b;
+        $b = $$$("Math").$frexp(self3), $a = $to_ary($b), f = $a[0] == null ? nil : $a[0], e2 = $a[1] == null ? nil : $a[1], $b;
         f = $$$("Math").$ldexp(f, $$$($$$("Float"), "MANT_DIG")).$to_i();
-        e = $rb_minus(e, $$$($$$("Float"), "MANT_DIG"));
-        return $rb_times(f, $$$($$$("Float"), "RADIX")["$**"](e)).$to_r();
+        e2 = $rb_minus(e2, $$$($$$("Float"), "MANT_DIG"));
+        return $rb_times(f, $$$($$$("Float"), "RADIX")["$**"](e2)).$to_r();
       }
     });
     $def(self2, "$to_s", function $$to_s(base) {
@@ -15982,21 +16355,21 @@ Opal.modules["corelib/math"] = function(Opal2) {
           sign = -1;
         }
         x = Math.abs(x);
-        var t = 1 / (1 + P * x);
-        var y = 1 - ((((A5 * t + A4) * t + A3) * t + A2) * t + A1) * t * Math.exp(-x * x);
+        var t2 = 1 / (1 + P * x);
+        var y = 1 - ((((A5 * t2 + A4) * t2 + A3) * t2 + A2) * t2 + A1) * t2 * Math.exp(-x * x);
         return sign * y;
       });
     }
     ;
     if (!$truthy(typeof Math.erfc !== "undefined")) {
       Opal2.prop(Math, "erfc", function(x) {
-        var z = Math.abs(x), t = 1 / (0.5 * z + 1);
-        var A1 = t * 0.17087277 + -0.82215223, A2 = t * A1 + 1.48851587, A3 = t * A2 + -1.13520398, A4 = t * A3 + 0.27886807, A5 = t * A4 + -0.18628806, A6 = t * A5 + 0.09678418, A7 = t * A6 + 0.37409196, A8 = t * A7 + 1.00002368, A9 = t * A8, A10 = -z * z - 1.26551223 + A9;
-        var a = t * Math.exp(A10);
+        var z = Math.abs(x), t2 = 1 / (0.5 * z + 1);
+        var A1 = t2 * 0.17087277 + -0.82215223, A2 = t2 * A1 + 1.48851587, A3 = t2 * A2 + -1.13520398, A4 = t2 * A3 + 0.27886807, A5 = t2 * A4 + -0.18628806, A6 = t2 * A5 + 0.09678418, A7 = t2 * A6 + 0.37409196, A8 = t2 * A7 + 1.00002368, A9 = t2 * A8, A10 = -z * z - 1.26551223 + A9;
+        var a2 = t2 * Math.exp(A10);
         if (x < 0) {
-          return 2 - a;
+          return 2 - a2;
         } else {
-          return a;
+          return a2;
         }
       });
     }
@@ -16026,7 +16399,7 @@ Opal.modules["corelib/math"] = function(Opal2) {
     });
     $def(self, "$gamma", function $$gamma(n) {
       n = $$("Math")["$float!"](n);
-      var i, t, x, value, result, twoN, threeN, fourN, fiveN;
+      var i, t2, x, value, result, twoN, threeN, fourN, fiveN;
       var G = 4.7421875;
       var P = [
         0.9999999999999971,
@@ -16090,8 +16463,8 @@ Opal.modules["corelib/math"] = function(Opal2) {
       for (i = 1; i < P.length; ++i) {
         x += P[i] / (n + i);
       }
-      t = n + G + 0.5;
-      return Math.sqrt(2 * Math.PI) * Math.pow(t, n + 0.5) * Math.exp(-t) * x;
+      t2 = n + G + 0.5;
+      return Math.sqrt(2 * Math.PI) * Math.pow(t2, n + 0.5) * Math.exp(-t2) * x;
       ;
     });
     $def(self, "$ldexp", function $$ldexp(mantissa, exponent) {
@@ -16782,20 +17155,20 @@ Opal.modules["corelib/rational"] = function(Opal2) {
       if (eps == null) {
         return self3;
       }
-      var e = eps.$abs(), a = $rb_minus(self3, e), b = $rb_plus(self3, e);
+      var e2 = eps.$abs(), a2 = $rb_minus(self3, e2), b = $rb_plus(self3, e2);
       var p0 = 0, p1 = 1, q0 = 1, q1 = 0, p2, q2;
-      var c, k, t;
+      var c, k, t2;
       while (true) {
-        c = a.$ceil();
+        c = a2.$ceil();
         if ($rb_le(c, b)) {
           break;
         }
         k = c - 1;
         p2 = k * p1 + p0;
         q2 = k * q1 + q0;
-        t = $rb_divide(1, $rb_minus(b, k));
-        b = $rb_divide(1, $rb_minus(a, k));
-        a = t;
+        t2 = $rb_divide(1, $rb_minus(b, k));
+        b = $rb_divide(1, $rb_minus(a2, k));
+        a2 = t2;
         p0 = p1;
         q0 = q1;
         p1 = p2;
@@ -17820,20 +18193,20 @@ Opal.modules["corelib/struct"] = function(Opal2) {
       ;
       var recursed1 = {}, recursed2 = {};
       function _eqeq(struct, other2) {
-        var key, a, b;
+        var key, a2, b;
         recursed1[struct.$__id__()] = true;
         recursed2[other2.$__id__()] = true;
         for (key in struct.$$data) {
-          a = struct.$$data[key];
+          a2 = struct.$$data[key];
           b = other2.$$data[key];
-          if ($$$("Struct")["$==="](a)) {
-            if (!recursed1.hasOwnProperty(a.$__id__()) || !recursed2.hasOwnProperty(b.$__id__())) {
-              if (!_eqeq(a, b)) {
+          if ($$$("Struct")["$==="](a2)) {
+            if (!recursed1.hasOwnProperty(a2.$__id__()) || !recursed2.hasOwnProperty(b.$__id__())) {
+              if (!_eqeq(a2, b)) {
                 return false;
               }
             }
           } else {
-            if (!a["$=="](b)) {
+            if (!a2["$=="](b)) {
               return false;
             }
           }
@@ -17851,20 +18224,20 @@ Opal.modules["corelib/struct"] = function(Opal2) {
       ;
       var recursed1 = {}, recursed2 = {};
       function _eqeq(struct, other2) {
-        var key, a, b;
+        var key, a2, b;
         recursed1[struct.$__id__()] = true;
         recursed2[other2.$__id__()] = true;
         for (key in struct.$$data) {
-          a = struct.$$data[key];
+          a2 = struct.$$data[key];
           b = other2.$$data[key];
-          if ($$$("Struct")["$==="](a)) {
-            if (!recursed1.hasOwnProperty(a.$__id__()) || !recursed2.hasOwnProperty(b.$__id__())) {
-              if (!_eqeq(a, b)) {
+          if ($$$("Struct")["$==="](a2)) {
+            if (!recursed1.hasOwnProperty(a2.$__id__()) || !recursed2.hasOwnProperty(b.$__id__())) {
+              if (!_eqeq(a2, b)) {
                 return false;
               }
             }
           } else {
-            if (!a["$eql?"](b)) {
+            if (!a2["$eql?"](b)) {
               return false;
             }
           }
@@ -18721,9 +19094,9 @@ Opal.modules["corelib/process"] = function(Opal2) {
     ;
     $defs(self, "$pid", $return_val(0));
     $defs(self, "$times", function $$times() {
-      var t = nil;
-      t = $$$("Time").$now().$to_f();
-      return $$$($$$("Benchmark"), "Tms").$new(t, t, t, t, t);
+      var t2 = nil;
+      t2 = $$$("Time").$now().$to_f();
+      return $$$($$$("Benchmark"), "Tms").$new(t2, t2, t2, t2, t2);
     });
     return $defs(self, "$clock_gettime", function $$clock_gettime(clock_id, unit) {
       var self2 = this, $ret_or_1 = nil, clock = nil;
@@ -18937,14 +19310,14 @@ Opal.modules["corelib/random/mersenne_twister"] = function(Opal2) {
       y ^= y >>> 18;
       return y >>> 0;
     }
-    function int_pair_to_real_exclusive(a, b) {
-      a >>>= 5;
+    function int_pair_to_real_exclusive(a2, b) {
+      a2 >>>= 5;
       b >>>= 6;
-      return (a * 67108864 + b) * (1 / 9007199254740992);
+      return (a2 * 67108864 + b) * (1 / 9007199254740992);
     }
     function genrand_real(mt) {
-      var a = genrand_int32(mt), b = genrand_int32(mt);
-      return int_pair_to_real_exclusive(a, b);
+      var a2 = genrand_int32(mt), b = genrand_int32(mt);
+      return int_pair_to_real_exclusive(a2, b);
     }
     return { genrand_real, init };
   }();
@@ -19235,8 +19608,8 @@ function Asciidoctor(moduleConfig) {
           });
           xhr.overrideMimeType("text/plain");
           xhr.send();
-        } catch (e) {
-          throw $$("IOError").$new("Error reading file or directory: " + path + "; reason: " + e.message);
+        } catch (e2) {
+          throw $$("IOError").$new("Error reading file or directory: " + path + "; reason: " + e2.message);
         }
         if (status === 404 || status === 0 && !data) {
           throw $$("IOError").$new("No such file or directory: " + path);
@@ -19356,7 +19729,7 @@ function Asciidoctor(moduleConfig) {
                 contentType = "image/tiff";
               }
             }
-          } catch (e) {
+          } catch (e2) {
             status = 0;
           }
           if (status === 404 || status === 0 && (!b64encoded || !contentType)) {
@@ -24903,9 +25276,9 @@ function Asciidoctor(moduleConfig) {
           if ($truthy($ret_or_1 = self3.header)) {
             return $ret_or_1;
           } else {
-            return $send(self3.blocks, "find", [], function $$17(e) {
-              if (e == null) e = nil;
-              return e.$context()["$=="]("section");
+            return $send(self3.blocks, "find", [], function $$17(e2) {
+              if (e2 == null) e2 = nil;
+              return e2.$context()["$=="]("section");
             });
           }
         });
@@ -31218,7 +31591,7 @@ function Asciidoctor(moduleConfig) {
       return function(self2, $parent_nesting2) {
         var $nesting3 = [self2].concat($parent_nesting2), $$ = Opal2.$r($nesting3);
         $def(self2, "$load", function $$load(input, options) {
-          var $a, $b, $c, $d, self3 = this, timings = nil, logger = nil, $ret_or_1 = nil, attrs = nil, input_path = nil, source = nil, doc = nil, e = nil, context = nil, wrapped_e = nil;
+          var $a, $b, $c, $d, self3 = this, timings = nil, logger = nil, $ret_or_1 = nil, attrs = nil, input_path = nil, source = nil, doc = nil, e2 = nil, context = nil, wrapped_e = nil;
           if (options == null) options = $hash2([], {});
           try {
             options = options.$merge();
@@ -31313,22 +31686,22 @@ function Asciidoctor(moduleConfig) {
             return doc;
           } catch ($err) {
             if (Opal2.rescue($err, [$$("StandardError")])) {
-              e = $err;
+              e2 = $err;
               try {
                 try {
                   context = "asciidoctor: FAILED: " + ($truthy($ret_or_1 = attrs["$[]"]("docfile")) ? $ret_or_1 : "<stdin>") + ": Failed to load AsciiDoc document";
-                  if ($truthy(e["$respond_to?"]("exception"))) {
-                    wrapped_e = e.$exception("" + context + " - " + e.$message());
-                    wrapped_e.$set_backtrace(e.$backtrace());
+                  if ($truthy(e2["$respond_to?"]("exception"))) {
+                    wrapped_e = e2.$exception("" + context + " - " + e2.$message());
+                    wrapped_e.$set_backtrace(e2.$backtrace());
                   } else {
-                    wrapped_e = e.$class().$new(context, e);
-                    wrapped_e["$stack_trace="](e.$stack_trace());
+                    wrapped_e = e2.$class().$new(context, e2);
+                    wrapped_e["$stack_trace="](e2.$stack_trace());
                   }
                   ;
                 } catch ($err2) {
                   if (Opal2.rescue($err2, [$$("StandardError")])) {
                     try {
-                      wrapped_e = e;
+                      wrapped_e = e2;
                     } finally {
                       Opal2.pop_exception();
                     }
@@ -34673,12 +35046,12 @@ function Asciidoctor(moduleConfig) {
           if (sym == null) sym = nil;
           return [self4.$const_get(sym), sym.$to_s().$downcase()];
         }, { $$s: self3 }), "sort", [], function $SafeMode$2($mlhs_tmp1, $mlhs_tmp2) {
-          var $a2, $b, a = nil, b = nil;
+          var $a2, $b, a2 = nil, b = nil;
           if ($mlhs_tmp1 == null) $mlhs_tmp1 = nil;
           if ($mlhs_tmp2 == null) $mlhs_tmp2 = nil;
-          $b = $mlhs_tmp1, $a2 = $to_ary($b), a = $a2[0] == null ? nil : $a2[0], $b;
+          $b = $mlhs_tmp1, $a2 = $to_ary($b), a2 = $a2[0] == null ? nil : $a2[0], $b;
           $b = $mlhs_tmp2, $a2 = $to_ary($b), b = $a2[0] == null ? nil : $a2[0], $b;
-          return a["$<=>"](b);
+          return a2["$<=>"](b);
         }, { $$has_top_level_mlhs_arg: true }).$to_h();
         $defs(self3, "$value_for_name", function $$value_for_name(name) {
           var self4 = this;
@@ -37049,16 +37422,17 @@ function Asciidoctor(moduleConfig) {
 }
 
 // main.ts
+var _am2tex = new a();
 var VIEW_TYPE_ADOC = "adoc";
 var DEFAULT_SETTINGS = {
-  refreshDelay: 500,
-  defaultMode: "preview"
+  refreshDelay: 500
 };
-var AdocView = class extends import_obsidian.TextFileView {
+var AdocView = class _AdocView extends import_obsidian.TextFileView {
   constructor(leaf, plugin) {
     super(leaf);
+    this.softWrap = false;
     this.plugin = plugin;
-    this.mode = plugin.settings.defaultMode;
+    this.mode = "preview";
   }
   getViewType() {
     return VIEW_TYPE_ADOC;
@@ -37070,14 +37444,10 @@ var AdocView = class extends import_obsidian.TextFileView {
   getIcon() {
     return "file-text";
   }
-  // Called by Obsidian to retrieve content before saving to disk
   getViewData() {
-    if (this.mode === "source" && this.sourceEl) {
-      return this.sourceEl.value;
-    }
+    if (this.mode === "source" && this.sourceEl) return this.sourceEl.value;
     return this.data;
   }
-  // Called by Obsidian when loading the file (clear=true) or reloading (clear=false)
   setViewData(data, clear) {
     this.data = data;
     if (!this.sourceEl || !this.previewEl) return;
@@ -37085,20 +37455,17 @@ var AdocView = class extends import_obsidian.TextFileView {
       if (clear) {
         this.sourceEl.value = data;
       } else {
-        const start = this.sourceEl.selectionStart;
-        const end = this.sourceEl.selectionEnd;
+        const s = this.sourceEl.selectionStart;
+        const e2 = this.sourceEl.selectionEnd;
         this.sourceEl.value = data;
         try {
-          this.sourceEl.setSelectionRange(start, end);
+          this.sourceEl.setSelectionRange(s, e2);
         } catch (_) {
         }
       }
     } else {
-      if (clear) {
-        this.renderPreview();
-      } else {
-        this.debouncedRender();
-      }
+      if (clear) this.renderPreview();
+      else this.debouncedRender();
     }
   }
   clear() {
@@ -37106,7 +37473,6 @@ var AdocView = class extends import_obsidian.TextFileView {
     if (this.sourceEl) this.sourceEl.value = "";
     if (this.previewEl) this.previewEl.innerHTML = "";
   }
-  // Called by the plugin when another view's source textarea changes in real time
   pushContentUpdate(content) {
     if (this.mode !== "preview") return;
     this.data = content;
@@ -37114,6 +37480,12 @@ var AdocView = class extends import_obsidian.TextFileView {
   }
   isPreviewMode() {
     return this.mode === "preview";
+  }
+  // Scroll the preview to an in-page anchor (called externally for cross-doc navigation)
+  scrollToAnchor(id) {
+    var _a;
+    if (this.mode !== "preview" || !this.previewEl) return;
+    (_a = this.previewEl.querySelector(`#${CSS.escape(id)}`)) == null ? void 0 : _a.scrollIntoView({ behavior: "smooth" });
   }
   async onOpen() {
     this.plugin.registerAdocView(this);
@@ -37125,12 +37497,26 @@ var AdocView = class extends import_obsidian.TextFileView {
     const container = this.containerEl.children[1];
     container.empty();
     container.addClass("adoc-view-container");
+    this.toolbarEl = container.createEl("div", { cls: "adoc-toolbar" });
+    this.buildToolbar();
     this.sourceEl = container.createEl("textarea", { cls: "adoc-source-editor" });
     this.sourceEl.spellcheck = false;
     this.sourceEl.addEventListener("input", () => {
       this.data = this.sourceEl.value;
       this.requestSave();
       this.plugin.broadcastContentChange(this.file, this.data);
+    });
+    this.sourceEl.addEventListener("paste", (e2) => {
+      var _a;
+      const items = (_a = e2.clipboardData) == null ? void 0 : _a.items;
+      if (!items) return;
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith("image/")) {
+          e2.preventDefault();
+          this.handleImagePaste(item);
+          return;
+        }
+      }
     });
     this.previewEl = container.createEl("div", { cls: "adoc-preview" });
     this.addAction("book-open", "Toggle source / preview", () => this.toggleMode());
@@ -37154,7 +37540,196 @@ var AdocView = class extends import_obsidian.TextFileView {
   async onClose() {
     this.plugin.unregisterAdocView(this);
   }
-  // ── Private ──────────────────────────────────────────────────────────────
+  // ── Toolbar ───────────────────────────────────────────────────────────────
+  buildToolbar() {
+    const t2 = this.toolbarEl;
+    const mkBtn = (iconName, fallback, label, act, fn) => {
+      const b = t2.createEl("button", {
+        cls: "adoc-toolbar-btn",
+        attr: { title: label, "data-action": act }
+      });
+      (0, import_obsidian.setIcon)(b, iconName);
+      if (!b.querySelector("svg")) b.setText(fallback);
+      b.addEventListener("mousedown", (e2) => {
+        e2.preventDefault();
+        fn();
+      });
+      return b;
+    };
+    const sep = () => t2.createEl("span", { cls: "adoc-toolbar-sep" });
+    mkBtn("bold", "B", "Toggle Bold", "bold", () => this.wrapOrInsert("*", "*", "bold text"));
+    mkBtn("italic", "I", "Toggle Italic", "italic", () => this.wrapOrInsert("_", "_", "italic text"));
+    mkBtn("code", "`", "Toggle Mono", "mono", () => this.wrapOrInsert("`", "`", "code"));
+    mkBtn("strikethrough", "S", "Toggle Strikethrough", "strike", () => this.wrapOrInsert("[line-through]#", "#", "text"));
+    mkBtn("highlighter", "#", "Toggle Highlight", "highlight", () => this.wrapOrInsert("#", "#", "highlighted"));
+    sep();
+    mkBtn("type", "H1", "Make Title", "title", () => this.insertTitle());
+    mkBtn("link", "Link", "Create Link", "link", () => this.insertLink());
+    mkBtn("image", "Img", "Paste Image", "image", () => this.insertImage());
+    mkBtn("table", "Tbl", "Create Table", "table", () => this.insertTable());
+    sep();
+    mkBtn("clipboard", "Fmt", "Paste Formatted Text", "paste", () => this.pasteFormatted());
+    sep();
+    mkBtn("wrap-text", "Wrap", "Toggle Soft Wrap", "wrap", () => this.toggleSoftWrap());
+  }
+  // ── Formatting helpers ────────────────────────────────────────────────────
+  wrapOrInsert(before, after, placeholder) {
+    const ta = this.sourceEl;
+    const s = ta.selectionStart;
+    const e2 = ta.selectionEnd;
+    const sel = ta.value.slice(s, e2);
+    if (sel) {
+      const pre = ta.value.slice(Math.max(0, s - before.length), s);
+      const post = ta.value.slice(e2, e2 + after.length);
+      if (pre === before && post === after) {
+        ta.setRangeText(sel, s - before.length, e2 + after.length, "end");
+        ta.setSelectionRange(s - before.length, s - before.length + sel.length);
+      } else {
+        ta.setRangeText(before + sel + after, s, e2, "end");
+        ta.setSelectionRange(s + before.length, s + before.length + sel.length);
+      }
+    } else {
+      const ins = before + placeholder + after;
+      ta.setRangeText(ins, s, e2, "end");
+      ta.setSelectionRange(s + before.length, s + before.length + placeholder.length);
+    }
+    ta.focus();
+    this.syncData();
+  }
+  insertTitle() {
+    const ta = this.sourceEl;
+    const pos = ta.selectionStart;
+    const lineStart = ta.value.lastIndexOf("\n", pos - 1) + 1;
+    const rawEnd = ta.value.indexOf("\n", pos);
+    const lineEnd = rawEnd === -1 ? ta.value.length : rawEnd;
+    const line = ta.value.slice(lineStart, lineEnd);
+    const m = line.match(/^(=+) /);
+    if (m) {
+      const level = m[1].length;
+      const next = level >= 6 ? "" : "=".repeat(level + 1) + " ";
+      ta.setRangeText(next + line.slice(m[0].length), lineStart, lineEnd, "end");
+    } else {
+      ta.setRangeText("= " + line, lineStart, lineEnd, "end");
+    }
+    ta.focus();
+    this.syncData();
+  }
+  insertLink() {
+    const ta = this.sourceEl;
+    const s = ta.selectionStart;
+    const e2 = ta.selectionEnd;
+    const sel = ta.value.slice(s, e2);
+    const ins = sel ? `link:URL[${sel}]` : "link:URL[Link text]";
+    ta.setRangeText(ins, s, e2, "end");
+    ta.setSelectionRange(s + 5, s + 8);
+    ta.focus();
+    this.syncData();
+  }
+  // Paste Image: if clipboard contains an image save it; otherwise insert template
+  async insertImage() {
+    try {
+      const clipItems = await navigator.clipboard.read();
+      for (const item of clipItems) {
+        const imgType = item.types.find((t2) => t2.startsWith("image/"));
+        if (imgType) {
+          const blob = await item.getType(imgType);
+          const savedFile = await this.saveImageToVault(blob, imgType);
+          this.insertImageReference(savedFile);
+          return;
+        }
+      }
+    } catch (_) {
+    }
+    const ta = this.sourceEl;
+    const pos = ta.selectionStart;
+    const ins = "image::path/to/image.png[Alt text]";
+    ta.setRangeText(ins, pos, ta.selectionEnd, "end");
+    ta.setSelectionRange(pos + 8, pos + 29);
+    ta.focus();
+    this.syncData();
+  }
+  insertTable() {
+    const ta = this.sourceEl;
+    const pos = ta.selectionStart;
+    const ins = '\n[cols="1,1,1"]\n|===\n| Header 1 | Header 2 | Header 3\n\n| Cell 1   | Cell 2   | Cell 3\n| Cell 4   | Cell 5   | Cell 6\n|===\n';
+    ta.setRangeText(ins, pos, ta.selectionEnd, "end");
+    ta.focus();
+    this.syncData();
+  }
+  async pasteFormatted() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) return;
+      const ta = this.sourceEl;
+      const pos = ta.selectionStart;
+      ta.setRangeText(text, pos, ta.selectionEnd, "end");
+      ta.focus();
+      this.syncData();
+    } catch (_) {
+    }
+  }
+  toggleSoftWrap() {
+    var _a;
+    this.softWrap = !this.softWrap;
+    this.sourceEl.style.whiteSpace = this.softWrap ? "pre-wrap" : "pre";
+    (_a = this.toolbarEl.querySelector('[data-action="wrap"]')) == null ? void 0 : _a.classList.toggle("is-active", this.softWrap);
+  }
+  // ── Image helpers ─────────────────────────────────────────────────────────
+  async handleImagePaste(item) {
+    const blob = item.getAsFile();
+    if (!blob) return;
+    try {
+      const savedFile = await this.saveImageToVault(blob, item.type);
+      this.insertImageReference(savedFile);
+    } catch (err) {
+      console.error("[Asciidian] Failed to save pasted image:", err);
+    }
+  }
+  async saveImageToVault(blob, mimeType) {
+    var _a;
+    const now = /* @__PURE__ */ new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const ext = mimeType === "image/jpeg" ? "jpg" : mimeType === "image/gif" ? "gif" : mimeType === "image/webp" ? "webp" : "png";
+    const fileName = `Pasted image ${stamp}.${ext}`;
+    let savePath;
+    try {
+      savePath = await this.app.fileManager.getAvailablePathForAttachment(fileName);
+    } catch (e2) {
+      const parent = (_a = this.file) == null ? void 0 : _a.parent;
+      const prefix = parent && !parent.isRoot() ? `${parent.path}/` : "";
+      savePath = `${prefix}${fileName}`;
+    }
+    const arrayBuffer = await blob.arrayBuffer();
+    return await this.app.vault.createBinary(savePath, arrayBuffer);
+  }
+  // Build an image:: reference using a path relative to the current file.
+  // Falls back to full vault path when the image lives in a different folder.
+  insertImageReference(savedFile) {
+    var _a;
+    const currentParent = (_a = this.file) == null ? void 0 : _a.parent;
+    const currentParentPath = currentParent && !currentParent.isRoot() ? currentParent.path : "";
+    let insertPath;
+    if (!currentParentPath) {
+      insertPath = savedFile.path;
+    } else if (savedFile.path.startsWith(currentParentPath + "/")) {
+      insertPath = savedFile.path.slice(currentParentPath.length + 1);
+    } else {
+      insertPath = savedFile.path;
+    }
+    const ta = this.sourceEl;
+    const pos = ta.selectionStart;
+    ta.setRangeText(`image::${insertPath}[]
+`, pos, ta.selectionEnd, "end");
+    ta.focus();
+    this.syncData();
+  }
+  // ── Internals ─────────────────────────────────────────────────────────────
+  syncData() {
+    this.data = this.sourceEl.value;
+    this.requestSave();
+    this.plugin.broadcastContentChange(this.file, this.data);
+  }
   toggleMode() {
     this.mode = this.mode === "source" ? "preview" : "source";
     this.applyModeDisplay();
@@ -37164,9 +37739,11 @@ var AdocView = class extends import_obsidian.TextFileView {
     if (this.mode === "source") {
       this.previewEl.style.display = "none";
       this.sourceEl.style.display = "block";
+      this.toolbarEl.style.display = "flex";
       this.sourceEl.value = (_a = this.data) != null ? _a : "";
       this.sourceEl.focus();
     } else {
+      this.toolbarEl.style.display = "none";
       this.sourceEl.style.display = "none";
       this.previewEl.style.display = "block";
       if (this.data) this.renderPreview();
@@ -37181,29 +37758,149 @@ var AdocView = class extends import_obsidian.TextFileView {
         attributes: {
           showtitle: "",
           icons: "font",
-          "source-highlighter": "highlight.js"
+          "source-highlighter": "highlight.js",
+          stem: ""
+          // enable latexmath by default; allows latexmath/asciimath macros
         }
       });
       this.previewEl.innerHTML = html;
       this.resolveImages();
-    } catch (e) {
-      console.error("[AsciiDoc Preview] Render error:", e);
-      this.previewEl.innerHTML = `<div class="adoc-render-error"><strong>Render error</strong><pre>${String(e)}</pre></div>`;
+      this.handleLinks();
+      void this.renderMathFormulas();
+      const pending = this.plugin.pendingAnchor;
+      if (pending && this.file && pending.file === this.file) {
+        this.plugin.pendingAnchor = null;
+        requestAnimationFrame(() => this.scrollToAnchor(pending.id));
+      }
+    } catch (e2) {
+      console.error("[AsciiDoc Preview] Render error:", e2);
+      this.previewEl.innerHTML = `<div class="adoc-render-error"><strong>Render error</strong><pre>${String(e2)}</pre></div>`;
     }
   }
+  handleLinks() {
+    if (!this.previewEl) return;
+    this.previewEl.querySelectorAll("a[href]").forEach((link) => {
+      const fresh = link.cloneNode(true);
+      link.replaceWith(fresh);
+      fresh.addEventListener("click", (e2) => {
+        var _a;
+        e2.preventDefault();
+        void this.handleLinkClick((_a = fresh.getAttribute("href")) != null ? _a : "");
+      });
+    });
+  }
+  async handleLinkClick(href) {
+    var _a, _b;
+    if (/^https?:\/\//.test(href) || href.startsWith("mailto:")) {
+      window.open(href, "_blank", "noopener,noreferrer");
+      return;
+    }
+    if (href.startsWith("#")) {
+      this.scrollToAnchor(href.slice(1));
+      return;
+    }
+    const hashIdx = href.indexOf("#");
+    const fragment = hashIdx !== -1 ? href.slice(hashIdx + 1) : "";
+    let filePart = hashIdx !== -1 ? href.slice(0, hashIdx) : href;
+    if (!filePart) {
+      if (fragment) this.scrollToAnchor(fragment);
+      return;
+    }
+    filePart = filePart.replace(/\.html$/, ".adoc");
+    try {
+      filePart = decodeURIComponent(filePart);
+    } catch (_) {
+    }
+    const parent = (_a = this.file) == null ? void 0 : _a.parent;
+    const absPath = !parent || parent.isRoot() ? filePart : `${parent.path}/${filePart}`;
+    const target = this.app.vault.getAbstractFileByPath(absPath);
+    if (!(target instanceof import_obsidian.TFile)) return;
+    if (fragment) {
+      this.plugin.pendingAnchor = { file: target, id: fragment };
+    }
+    const leaf = this.app.workspace.getLeaf("tab");
+    await leaf.openFile(target);
+    if (fragment && ((_b = this.plugin.pendingAnchor) == null ? void 0 : _b.file) === target) {
+      this.plugin.pendingAnchor = null;
+      const view = leaf.view;
+      if (view instanceof _AdocView) {
+        requestAnimationFrame(() => view.scrollToAnchor(fragment));
+      }
+    }
+  }
+  // ── Math rendering ────────────────────────────────────────────────────────
+  // Self-contained math rendering using Obsidian's renderMath API + asciimath2tex.
+  // No external plugins or CDN required.
+  //
+  // Asciidoctor.js output format:
+  //   latexmath:[...]         → <span class="stem">\(...\)</span>
+  //   [latexmath] ++++ ... →   <div class="stemblock"><div class="content">\[...\]</div></div>
+  //   asciimath:[...] / stem  → <span class="stem">\$...\$</span>
+  //   [asciimath] ++++ ... →   <div class="stemblock"><div class="content">\$...\$</div></div>
+  //
+  // Flow: strip Asciidoctor delimiters → convert AsciiMath to TeX → renderMath → finishRenderMath
+  async renderMathFormulas() {
+    var _a, _b, _c;
+    if (!this.previewEl) return;
+    if (!this.previewEl.querySelector(".stem, .stemblock")) return;
+    await (0, import_obsidian.loadMathJax)();
+    const stems = Array.from(
+      this.previewEl.querySelectorAll(".stem, .stemblock")
+    );
+    for (const el of stems) {
+      if (!el.isConnected) continue;
+      if (el.querySelector("mjx-container")) continue;
+      const srcEl = el.classList.contains("stemblock") ? (_a = el.querySelector(".content")) != null ? _a : el : el;
+      let src = (_c = (_b = srcEl.textContent) == null ? void 0 : _b.trim()) != null ? _c : "";
+      let display = el.classList.contains("stemblock");
+      if (src.startsWith("\\(") && src.endsWith("\\)")) {
+        src = src.slice(2, -2).trim();
+      } else if (src.startsWith("\\[") && src.endsWith("\\]")) {
+        src = src.slice(2, -2).trim();
+        display = true;
+      } else if (src.startsWith("\\$") && src.endsWith("\\$")) {
+        try {
+          src = _am2tex.parse(src.slice(2, -2).trim());
+        } catch (e2) {
+          src = src.slice(2, -2).trim();
+        }
+      }
+      if (!src) continue;
+      try {
+        const rendered = (0, import_obsidian.renderMath)(src, display);
+        el.empty();
+        el.appendChild(rendered);
+      } catch (e2) {
+        console.error("[Asciidian] renderMath error:", e2);
+      }
+    }
+    await (0, import_obsidian.finishRenderMath)();
+  }
+  // Resolve image src attributes to vault resource URLs.
+  // Tries relative path first (standard AsciiDoc), then absolute vault path.
   resolveImages() {
     var _a;
-    if (!((_a = this.file) == null ? void 0 : _a.parent) || !this.previewEl) return;
-    const parentPath = this.file.parent.path;
+    if (!this.previewEl) return;
+    const parentPath = ((_a = this.file) == null ? void 0 : _a.parent) && !this.file.parent.isRoot() ? this.file.parent.path : "";
     this.previewEl.querySelectorAll("img[src]").forEach((img) => {
       var _a2;
-      const src = (_a2 = img.getAttribute("src")) != null ? _a2 : "";
-      if (src.startsWith("http") || src.startsWith("data:") || src.startsWith("blob:") || src.startsWith("app:")) return;
-      const imagePath = parentPath === "/" || parentPath === "" ? src : `${parentPath}/${src}`;
-      const f = this.app.vault.getAbstractFileByPath(imagePath);
-      if (f instanceof import_obsidian.TFile) {
-        img.src = this.app.vault.getResourcePath(f);
+      const rawSrc = (_a2 = img.getAttribute("src")) != null ? _a2 : "";
+      if (!rawSrc || rawSrc.startsWith("http") || rawSrc.startsWith("data:") || rawSrc.startsWith("blob:") || rawSrc.startsWith("app:")) return;
+      let src;
+      try {
+        src = decodeURIComponent(rawSrc);
+      } catch (_) {
+        src = rawSrc;
       }
+      if (parentPath) {
+        const f2 = this.app.vault.getAbstractFileByPath(`${parentPath}/${src}`);
+        if (f2 instanceof import_obsidian.TFile) {
+          img.src = this.app.vault.getResourcePath(f2);
+          return;
+        }
+      }
+      const f = this.app.vault.getAbstractFileByPath(src);
+      if (f instanceof import_obsidian.TFile) img.src = this.app.vault.getResourcePath(f);
     });
   }
 };
@@ -37211,6 +37908,9 @@ var AdocPlugin = class extends import_obsidian.Plugin {
   constructor() {
     super(...arguments);
     this.activeViews = /* @__PURE__ */ new Set();
+    // Pending cross-document anchor navigation set by handleLinkClick,
+    // consumed by the target view's renderPreview()
+    this.pendingAnchor = null;
   }
   async onload() {
     await this.loadSettings();
@@ -37262,13 +37962,10 @@ var AdocPlugin = class extends import_obsidian.Plugin {
   unregisterAdocView(view) {
     this.activeViews.delete(view);
   }
-  // Notify all preview panes that the source content has changed (real-time, pre-save)
   broadcastContentChange(file, content) {
     if (!file) return;
     for (const view of this.activeViews) {
-      if (view.file === file) {
-        view.pushContentUpdate(content);
-      }
+      if (view.file === file) view.pushContentUpdate(content);
     }
   }
   async loadSettings() {
@@ -37294,12 +37991,6 @@ var AdocSettingTab = class extends import_obsidian.PluginSettingTab {
       (text) => text.setPlaceholder("500").setValue(this.plugin.settings.refreshDelay.toString()).onChange(async (value) => {
         const parsed = parseInt(value);
         this.plugin.settings.refreshDelay = isNaN(parsed) || parsed < 100 ? 500 : parsed;
-        await this.plugin.saveSettings();
-      })
-    );
-    new import_obsidian.Setting(containerEl).setName("Default view mode").setDesc("Whether to open .adoc files in Preview or Source mode by default").addDropdown(
-      (drop) => drop.addOption("preview", "Preview (rendered HTML)").addOption("source", "Source (plain text)").setValue(this.plugin.settings.defaultMode).onChange(async (value) => {
-        this.plugin.settings.defaultMode = value;
         await this.plugin.saveSettings();
       })
     );

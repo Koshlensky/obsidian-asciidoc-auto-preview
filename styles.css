@@ -12,23 +12,93 @@
     overflow: hidden;
 }
 
+/* ── Editor toolbar ──────────────────────────────────────────────────────── */
+
+.adoc-toolbar {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 1px;
+    padding: 3px 6px;
+    min-height: 34px;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--background-modifier-border);
+    user-select: none;
+}
+
+.adoc-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 5px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.78em;
+    font-family: var(--font-text);
+    font-weight: 500;
+    line-height: 1;
+    transition: background 0.1s, color 0.1s, border-color 0.1s;
+    white-space: nowrap;
+}
+
+.adoc-toolbar-btn:hover {
+    background: var(--background-modifier-hover);
+    color: var(--text-normal);
+    border-color: var(--background-modifier-border);
+}
+
+.adoc-toolbar-btn:active {
+    background: var(--background-modifier-active-hover);
+}
+
+.adoc-toolbar-btn.is-active {
+    background: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
+    color: var(--interactive-accent);
+    border-color: color-mix(in srgb, var(--interactive-accent) 40%, transparent);
+}
+
+.adoc-toolbar-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+.adoc-toolbar-sep {
+    width: 1px;
+    height: 16px;
+    background: var(--background-modifier-border);
+    margin: 0 3px;
+    flex-shrink: 0;
+}
+
 /* ── Source textarea editor ──────────────────────────────────────────────── */
 
 .adoc-source-editor {
     flex: 1;
+    min-height: 0;
     display: block;
     width: 100%;
-    height: 100%;
     resize: none;
     border: none;
     outline: none;
     padding: 20px 24px;
     box-sizing: border-box;
     font-family: var(--font-monospace);
-    font-size: var(--font-text-size);
+    /* min 16px prevents iOS from zooming in on textarea focus */
+    font-size: max(16px, var(--font-text-size));
     line-height: 1.7;
     background: var(--background-primary);
     color: var(--text-normal);
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-y: auto;
     scrollbar-gutter: stable;
 }
 
@@ -36,7 +106,7 @@
 
 .adoc-preview {
     flex: 1;
-    height: 100%;
+    min-height: 0;
     padding: 24px 32px;
     overflow-y: auto;
     box-sizing: border-box;
@@ -289,16 +359,17 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Admonition blocks  (Note / Tip / Warning / Caution / Important)
-   Rendered as callout-style cards instead of the default AsciiDoc table layout
+   Card layout: coloured header strip with type label, tinted content body.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .adoc-preview .admonitionblock {
     margin: 1.2em 0;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
+    border: 1px solid;
 }
 
-/* Hide the table chrome, expose as block */
+/* Flatten the generated table into stacked blocks */
 .adoc-preview .admonitionblock > table,
 .adoc-preview .admonitionblock > table > tbody,
 .adoc-preview .admonitionblock > table > tbody > tr {
@@ -309,124 +380,163 @@
     padding: 0;
 }
 
-.adoc-preview .admonitionblock > table > tbody > tr {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75em;
-    padding: 0.85em 1.1em;
-    border-radius: 6px;
-    border-left: 4px solid;
-}
-
-/* Icon cell (type label) */
+/* Icon cell → full-width coloured header */
 .adoc-preview .admonitionblock td.icon {
-    flex-shrink: 0;
-    font-size: 0.72em;
+    display: block;
+    padding: 0.35em 1em;
+    font-size: 0.7em;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.15em 0;
-    min-width: 4.5em;
+    letter-spacing: 0.12em;
     border: none;
+    color: #fff;
+}
+
+/* Asciidoctor renders <i class="fa icon-note" title="Note"> when icons:font.
+   Show that title as text since Font Awesome is not loaded. */
+.adoc-preview .admonitionblock td.icon i {
+    font-style: normal;
+    font-family: inherit;
+}
+.adoc-preview .admonitionblock td.icon i::before {
+    content: attr(title);
+}
+
+/* Fallback: plain-text mode emits <div class="title">Note</div> */
+.adoc-preview .admonitionblock td.icon .title {
+    font-weight: 800;
 }
 
 /* Content cell */
 .adoc-preview .admonitionblock td.content {
-    flex: 1;
-    padding: 0;
+    display: block;
+    padding: 0.8em 1em 0.9em;
     border: none;
     font-size: 0.95em;
-    word-wrap: anywhere;
+    word-wrap: break-word;
 }
-
 .adoc-preview .admonitionblock td.content > :last-child { margin-bottom: 0; }
 
-/* Per-type colours */
-.adoc-preview .admonitionblock.note > table > tbody > tr {
-    background: color-mix(in srgb, var(--color-blue, #4a90d9) 8%, var(--background-primary));
+/* ── Per-type palette ────────────────────────────────────────────────────── */
+
+.adoc-preview .admonitionblock.note {
     border-color: var(--color-blue, #4a90d9);
 }
-.adoc-preview .admonitionblock.note td.icon { color: var(--color-blue, #4a90d9); }
-
-.adoc-preview .admonitionblock.tip > table > tbody > tr {
-    background: color-mix(in srgb, var(--color-green, #5aab6e) 8%, var(--background-primary));
-    border-color: var(--color-green, #5aab6e);
+.adoc-preview .admonitionblock.note td.icon {
+    background: var(--color-blue, #4a90d9);
 }
-.adoc-preview .admonitionblock.tip td.icon { color: var(--color-green, #5aab6e); }
+.adoc-preview .admonitionblock.note td.content {
+    background: color-mix(in srgb, var(--color-blue, #4a90d9) 7%, var(--background-primary));
+}
 
-.adoc-preview .admonitionblock.warning > table > tbody > tr {
-    background: color-mix(in srgb, var(--color-yellow, #e0a030) 10%, var(--background-primary));
+.adoc-preview .admonitionblock.tip {
+    border-color: var(--color-green, #3cb371);
+}
+.adoc-preview .admonitionblock.tip td.icon {
+    background: var(--color-green, #3cb371);
+}
+.adoc-preview .admonitionblock.tip td.content {
+    background: color-mix(in srgb, var(--color-green, #3cb371) 7%, var(--background-primary));
+}
+
+.adoc-preview .admonitionblock.warning {
     border-color: var(--color-yellow, #e0a030);
 }
-.adoc-preview .admonitionblock.warning td.icon { color: var(--color-yellow, #e0a030); }
+.adoc-preview .admonitionblock.warning td.icon {
+    background: var(--color-yellow, #e0a030);
+}
+.adoc-preview .admonitionblock.warning td.content {
+    background: color-mix(in srgb, var(--color-yellow, #e0a030) 9%, var(--background-primary));
+}
 
-.adoc-preview .admonitionblock.caution > table > tbody > tr {
-    background: color-mix(in srgb, var(--color-orange, #d96a30) 8%, var(--background-primary));
+.adoc-preview .admonitionblock.caution {
     border-color: var(--color-orange, #d96a30);
 }
-.adoc-preview .admonitionblock.caution td.icon { color: var(--color-orange, #d96a30); }
+.adoc-preview .admonitionblock.caution td.icon {
+    background: var(--color-orange, #d96a30);
+}
+.adoc-preview .admonitionblock.caution td.content {
+    background: color-mix(in srgb, var(--color-orange, #d96a30) 7%, var(--background-primary));
+}
 
-.adoc-preview .admonitionblock.important > table > tbody > tr {
-    background: color-mix(in srgb, var(--color-red, #c44040) 8%, var(--background-primary));
+.adoc-preview .admonitionblock.important {
     border-color: var(--color-red, #c44040);
 }
-.adoc-preview .admonitionblock.important td.icon { color: var(--color-red, #c44040); }
+.adoc-preview .admonitionblock.important td.icon {
+    background: var(--color-red, #c44040);
+}
+.adoc-preview .admonitionblock.important td.content {
+    background: color-mix(in srgb, var(--color-red, #c44040) 7%, var(--background-primary));
+}
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Tables
+   Borders are controlled by frame= and grid= AsciiDoc attributes, exactly
+   like the native AsciiDoc/Asciidoctor spec. Defaults: frame=all, grid=all.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.adoc-preview table {
+.adoc-preview table.tableblock {
     border-collapse: collapse;
     width: 100%;
     margin: 1.2em 0;
     font-size: 0.93em;
-    border-radius: 6px;
-    overflow: hidden;
+    /* Outer frame — zero by default, set by .frame-* classes below */
+    border-style: solid;
+    border-color: var(--background-modifier-border);
+    border-width: 0;
 }
 
-.adoc-preview table,
-.adoc-preview th,
-.adoc-preview td {
-    border: 0 solid var(--background-modifier-border);
+.adoc-preview table.tableblock th,
+.adoc-preview table.tableblock td {
+    padding: 0.45em 0.9em;
+    vertical-align: top;
+    word-wrap: break-word;
+    /* Inner grid — zero by default, set by .grid-* classes below */
+    border-style: solid;
+    border-color: var(--background-modifier-border);
+    border-width: 0;
 }
 
-.adoc-preview table.grid-all  > * > tr > * { border-width: 1px; }
-.adoc-preview table.grid-rows > * > tr > * { border-width: 1px 0; }
-.adoc-preview table.grid-cols > * > tr > * { border-width: 0 1px; }
+/* ── Frame (outer table border) ──────────────────────────────────────────── */
+.adoc-preview table.tableblock.frame-all   { border-width: 1px; }
+.adoc-preview table.tableblock.frame-ends  { border-top-width: 1px; border-bottom-width: 1px; }
+.adoc-preview table.tableblock.frame-sides { border-left-width: 1px; border-right-width: 1px; }
+/* frame-none: 0 (default — no override needed) */
 
-.adoc-preview table.frame-all   { border-width: 1px; border-radius: 6px; }
-.adoc-preview table.frame-ends  { border-width: 1px 0; }
-.adoc-preview table.frame-sides { border-width: 0 1px; }
+/* ── Grid (inner cell borders) ───────────────────────────────────────────── */
+.adoc-preview table.tableblock.grid-all  > * > tr > * { border-width: 1px; }
+.adoc-preview table.tableblock.grid-rows > * > tr > * { border-top-width: 1px; border-bottom-width: 1px; }
+.adoc-preview table.tableblock.grid-cols > * > tr > * { border-left-width: 1px; border-right-width: 1px; }
+/* grid-none: 0 (default — no override needed) */
 
-.adoc-preview thead th {
+/* ── Header row ──────────────────────────────────────────────────────────── */
+.adoc-preview table.tableblock thead th {
     background: var(--background-secondary);
     font-weight: 700;
     text-align: left;
     padding: 0.55em 0.9em;
-    border-bottom: 2px solid var(--background-modifier-border);
 }
 
-.adoc-preview td {
-    padding: 0.45em 0.9em;
-    vertical-align: top;
-    word-wrap: anywhere;
+/* Emphasise the header/body divider when horizontal lines are visible */
+.adoc-preview table.tableblock.grid-all  > thead > tr > *,
+.adoc-preview table.tableblock.grid-rows > thead > tr > * {
+    border-bottom-width: 2px;
 }
 
-/* Stripe variants */
-.adoc-preview table.stripes-all   > tbody > tr,
-.adoc-preview table.stripes-odd   > tbody > tr:nth-of-type(odd),
-.adoc-preview table.stripes-even  > tbody > tr:nth-of-type(even),
-.adoc-preview table.stripes-hover > tbody > tr:hover {
+/* ── Stripe variants ─────────────────────────────────────────────────────── */
+.adoc-preview table.tableblock.stripes-all   > tbody > tr,
+.adoc-preview table.tableblock.stripes-odd   > tbody > tr:nth-of-type(odd),
+.adoc-preview table.tableblock.stripes-even  > tbody > tr:nth-of-type(even),
+.adoc-preview table.tableblock.stripes-hover > tbody > tr:hover {
     background: var(--background-secondary);
 }
 
 .adoc-preview p.tableblock:last-child { margin-bottom: 0; }
 
-/* Table title */
-.adoc-preview .tableblock.frame-all + .title,
-.adoc-preview table + .title {
+/* Table caption */
+.adoc-preview .tableblock + .title,
+.adoc-preview table.tableblock caption {
     font-size: 0.83em;
     font-style: italic;
     color: var(--text-muted);
@@ -501,7 +611,6 @@
 .adoc-preview #toc a:hover { text-decoration: underline; }
 
 /* ── Lead paragraph ──────────────────────────────────────────────────────── */
-
 .adoc-preview .paragraph.lead > p {
     font-size: 1.13em;
     line-height: 1.7;
@@ -514,6 +623,7 @@
     border: none;
     background: none;
     font-size: 0.88em;
+    width: 100%;
 }
 
 .adoc-preview .colist > table td {
@@ -523,8 +633,40 @@
     color: var(--text-muted);
 }
 
-/* ── Footnotes ───────────────────────────────────────────────────────────── */
+/* ── Math / stem (MathJax — loaded on demand) ────────────────────────────── */
 
+/* Block display formula */
+.adoc-preview .stemblock {
+    overflow-x: auto;
+    margin: 1.2em 0;
+    text-align: center;
+}
+
+.adoc-preview .stemblock .content {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Inline formula — keep it in flow */
+.adoc-preview .stem {
+    display: inline;
+}
+
+/* MathJax 3 CHTML output — adapt colours to active theme */
+.adoc-preview mjx-container {
+    color: inherit;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.adoc-preview mjx-container[display="true"] {
+    display: block;
+    text-align: center;
+    margin: 0.6em 0;
+    overflow-x: auto;
+}
+
+/* ── Footnotes ───────────────────────────────────────────────────────────── */
 .adoc-preview #footnotes {
     margin-top: 2em;
     padding-top: 0.8em;
