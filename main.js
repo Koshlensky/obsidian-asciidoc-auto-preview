@@ -37513,7 +37513,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       for (const item of Array.from(items)) {
         if (item.type.startsWith("image/")) {
           e2.preventDefault();
-          this.handleImagePaste(item);
+          void this.handleImagePaste(item);
           return;
         }
       }
@@ -37567,10 +37567,14 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
     sep();
     mkBtn("type", "H1", "Make title", "title", () => this.insertTitle());
     mkBtn("link", "Link", "Create link", "link", () => this.insertLink());
-    mkBtn("image", "Img", "Paste image", "image", () => this.insertImage());
+    mkBtn("image", "Img", "Paste image", "image", () => {
+      void this.insertImage();
+    });
     mkBtn("table", "Tbl", "Create table", "table", () => this.insertTable());
     sep();
-    mkBtn("clipboard", "Fmt", "Paste formatted text", "paste", () => this.pasteFormatted());
+    mkBtn("clipboard", "Fmt", "Paste formatted text", "paste", () => {
+      void this.pasteFormatted();
+    });
     sep();
     mkBtn("wrap-text", "Wrap", "Toggle soft wrap", "wrap", () => this.toggleSoftWrap());
   }
@@ -37764,7 +37768,6 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
           icons: "font",
           "source-highlighter": "highlight.js",
           stem: ""
-          // enable latexmath by default; allows latexmath/asciimath macros
         }
       });
       const parsed = new DOMParser().parseFromString(html, "text/html");
@@ -37942,7 +37945,7 @@ var AdocPlugin = class extends import_obsidian.Plugin {
     this.addSettingTab(new AdocSettingTab(this.app, this));
     this.addCommand({
       id: "new-adoc-note",
-      name: "New AsciiDoc note",
+      name: "New .adoc note",
       callback: async () => {
         var _a;
         const activeFile = this.app.workspace.getActiveFile();
@@ -38008,7 +38011,7 @@ var AdocSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h3", { text: "AsciiDoc Live settings" });
+    new import_obsidian.Setting(containerEl).setName("AsciiDoc Live").setHeading();
     new import_obsidian.Setting(containerEl).setName("Auto-refresh delay (ms)").setDesc("How long to wait after the last keystroke before updating the preview").addText(
       (text) => text.setPlaceholder("500").setValue(this.plugin.settings.refreshDelay.toString()).onChange(async (value) => {
         const parsed = parseInt(value);

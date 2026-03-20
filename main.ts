@@ -146,7 +146,7 @@ class AdocView extends TextFileView {
             for (const item of Array.from(items)) {
                 if (item.type.startsWith('image/')) {
                     e.preventDefault();
-                    this.handleImagePaste(item);
+                    void this.handleImagePaste(item);
                     return;
                 }
             }
@@ -214,10 +214,10 @@ class AdocView extends TextFileView {
         sep();
         mkBtn('type',          'H1',   'Make title',            'title',     () => this.insertTitle());
         mkBtn('link',          'Link', 'Create link',           'link',      () => this.insertLink());
-        mkBtn('image',         'Img',  'Paste image',           'image',     () => this.insertImage());
+        mkBtn('image',         'Img',  'Paste image',           'image',     () => { void this.insertImage(); });
         mkBtn('table',         'Tbl',  'Create table',          'table',     () => this.insertTable());
         sep();
-        mkBtn('clipboard',     'Fmt',  'Paste formatted text',  'paste',     () => this.pasteFormatted());
+        mkBtn('clipboard',     'Fmt',  'Paste formatted text',  'paste',     () => { void this.pasteFormatted(); });
         sep();
         mkBtn('wrap-text',     'Wrap', 'Toggle soft wrap',      'wrap',      () => this.toggleSoftWrap());
     }
@@ -439,9 +439,9 @@ class AdocView extends TextFileView {
                     showtitle: '',
                     icons: 'font',
                     'source-highlighter': 'highlight.js',
-                    stem: '',          // enable latexmath by default; allows latexmath/asciimath macros
+                    stem: '',
                 },
-            }) as string;
+            });
             const parsed = new DOMParser().parseFromString(html, 'text/html');
             this.previewEl.empty();
             Array.from(parsed.body.childNodes).forEach(n => this.previewEl.appendChild(n));
@@ -525,7 +525,7 @@ class AdocView extends TextFileView {
             this.plugin.pendingAnchor = null;
             const view = leaf.view;
             if (view instanceof AdocView) {
-                requestAnimationFrame(() => (view as AdocView).scrollToAnchor(fragment));
+                requestAnimationFrame(() => view.scrollToAnchor(fragment));
             }
         }
     }
@@ -674,7 +674,7 @@ export default class AdocPlugin extends Plugin {
 
         this.addCommand({
             id: 'new-adoc-note',
-            name: 'New AsciiDoc note',
+            name: 'New .adoc note',
             callback: async () => {
                 const activeFile = this.app.workspace.getActiveFile();
                 const folder = activeFile?.parent ?? this.app.vault.getRoot();
@@ -752,7 +752,7 @@ class AdocSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h3', { text: 'AsciiDoc Live settings' });
+        new Setting(containerEl).setName('AsciiDoc Live').setHeading();
 
         new Setting(containerEl)
             .setName('Auto-refresh delay (ms)')
