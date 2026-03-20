@@ -752,8 +752,6 @@ class AdocSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        new Setting(containerEl).setName('AsciiDoc Live').setHeading();
-
         new Setting(containerEl)
             .setName('Auto-refresh delay (ms)')
             .setDesc('How long to wait after the last keystroke before updating the preview')

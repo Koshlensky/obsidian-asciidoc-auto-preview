@@ -38011,7 +38011,6 @@ var AdocSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian.Setting(containerEl).setName("AsciiDoc Live").setHeading();
     new import_obsidian.Setting(containerEl).setName("Auto-refresh delay (ms)").setDesc("How long to wait after the last keystroke before updating the preview").addText(
       (text) => text.setPlaceholder("500").setValue(this.plugin.settings.refreshDelay.toString()).onChange(async (value) => {
         const parsed = parseInt(value);
