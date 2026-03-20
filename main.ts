@@ -1,7 +1,6 @@
 import {
     App,
     Editor,
-    MarkdownRenderer,
     Menu,
     Plugin,
     PluginSettingTab,
@@ -30,6 +29,18 @@ const VIEW_TYPE_ADOC = 'adoc';
 
 interface AdocPluginSettings {
     refreshDelay: number;
+}
+
+interface AsciidoctorProcessor {
+    convert(content: string, options?: Record<string, unknown>): string;
+}
+
+interface FileManagerExt {
+    getAvailablePathForAttachment(fileName: string): Promise<string>;
+}
+
+interface MathJaxAPI {
+    typesetPromise?: (elements: HTMLElement[]) => Promise<void>;
 }
 
 const DEFAULT_SETTINGS: AdocPluginSettings = {
@@ -72,7 +83,7 @@ class AdocView extends TextFileView {
                 const s = this.sourceEl.selectionStart;
                 const e = this.sourceEl.selectionEnd;
                 this.sourceEl.value = data;
-                try { this.sourceEl.setSelectionRange(s, e); } catch (_) {}
+                try { this.sourceEl.setSelectionRange(s, e); } catch { /* best-effort: ignore selection restore */ }
             }
         } else {
             if (clear) this.renderPreview();
@@ -101,7 +112,7 @@ class AdocView extends TextFileView {
             ?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    async onOpen(): Promise<void> {
+    onOpen(): Promise<void> {
         this.plugin.registerAdocView(this);
 
         this.debouncedRender = debounce(
@@ -169,10 +180,12 @@ class AdocView extends TextFileView {
         );
 
         this.applyModeDisplay();
+        return Promise.resolve();
     }
 
-    async onClose(): Promise<void> {
+    onClose(): Promise<void> {
         this.plugin.unregisterAdocView(this);
+        return Promise.resolve();
     }
 
     // ── Toolbar ───────────────────────────────────────────────────────────────
@@ -193,20 +206,20 @@ class AdocView extends TextFileView {
 
         const sep = () => t.createEl('span', { cls: 'adoc-toolbar-sep' });
 
-        mkBtn('bold',          'B',    'Toggle Bold',           'bold',      () => this.wrapOrInsert('*', '*', 'bold text'));
-        mkBtn('italic',        'I',    'Toggle Italic',         'italic',    () => this.wrapOrInsert('_', '_', 'italic text'));
-        mkBtn('code',          '`',    'Toggle Mono',           'mono',      () => this.wrapOrInsert('`', '`', 'code'));
-        mkBtn('strikethrough', 'S',    'Toggle Strikethrough',  'strike',    () => this.wrapOrInsert('[line-through]#', '#', 'text'));
-        mkBtn('highlighter',   '#',    'Toggle Highlight',      'highlight', () => this.wrapOrInsert('#', '#', 'highlighted'));
+        mkBtn('bold',          'B',    'Toggle bold',           'bold',      () => this.wrapOrInsert('*', '*', 'bold text'));
+        mkBtn('italic',        'I',    'Toggle italic',         'italic',    () => this.wrapOrInsert('_', '_', 'italic text'));
+        mkBtn('code',          '`',    'Toggle mono',           'mono',      () => this.wrapOrInsert('`', '`', 'code'));
+        mkBtn('strikethrough', 'S',    'Toggle strikethrough',  'strike',    () => this.wrapOrInsert('[line-through]#', '#', 'text'));
+        mkBtn('highlighter',   '#',    'Toggle highlight',      'highlight', () => this.wrapOrInsert('#', '#', 'highlighted'));
         sep();
-        mkBtn('type',          'H1',   'Make Title',            'title',     () => this.insertTitle());
-        mkBtn('link',          'Link', 'Create Link',           'link',      () => this.insertLink());
-        mkBtn('image',         'Img',  'Paste Image',           'image',     () => this.insertImage());
-        mkBtn('table',         'Tbl',  'Create Table',          'table',     () => this.insertTable());
+        mkBtn('type',          'H1',   'Make title',            'title',     () => this.insertTitle());
+        mkBtn('link',          'Link', 'Create link',           'link',      () => this.insertLink());
+        mkBtn('image',         'Img',  'Paste image',           'image',     () => this.insertImage());
+        mkBtn('table',         'Tbl',  'Create table',          'table',     () => this.insertTable());
         sep();
-        mkBtn('clipboard',     'Fmt',  'Paste Formatted Text',  'paste',     () => this.pasteFormatted());
+        mkBtn('clipboard',     'Fmt',  'Paste formatted text',  'paste',     () => this.pasteFormatted());
         sep();
-        mkBtn('wrap-text',     'Wrap', 'Toggle Soft Wrap',      'wrap',      () => this.toggleSoftWrap());
+        mkBtn('wrap-text',     'Wrap', 'Toggle soft wrap',      'wrap',      () => this.toggleSoftWrap());
     }
 
     // ── Formatting helpers ────────────────────────────────────────────────────
@@ -273,7 +286,7 @@ class AdocView extends TextFileView {
     // Paste Image: if clipboard contains an image save it; otherwise insert template
     private async insertImage(): Promise<void> {
         try {
-            const clipItems: ClipboardItem[] = await (navigator.clipboard as any).read();
+            const clipItems: ClipboardItem[] = await (navigator.clipboard as unknown as { read(): Promise<ClipboardItem[]> }).read();
             for (const item of clipItems) {
                 const imgType = item.types.find((t: string) => t.startsWith('image/'));
                 if (imgType) {
@@ -283,7 +296,9 @@ class AdocView extends TextFileView {
                     return;
                 }
             }
-        } catch (_) {}
+        } catch (err) {
+            console.warn('[AsciiDoc Live] Could not read clipboard image:', err);
+        }
 
         // Fallback: insert placeholder
         const ta  = this.sourceEl;
@@ -313,7 +328,9 @@ class AdocView extends TextFileView {
             ta.setRangeText(text, pos, ta.selectionEnd, 'end');
             ta.focus();
             this.syncData();
-        } catch (_) {}
+        } catch (err) {
+            console.warn('[AsciiDoc Live] Could not read clipboard text:', err);
+        }
     }
 
     private toggleSoftWrap(): void {
@@ -351,7 +368,7 @@ class AdocView extends TextFileView {
 
         let savePath: string;
         try {
-            savePath = await (this.app.fileManager as any).getAvailablePathForAttachment(fileName);
+            savePath = await (this.app.fileManager as unknown as FileManagerExt).getAvailablePathForAttachment(fileName);
         } catch {
             const parent = this.file?.parent;
             const prefix = parent && !parent.isRoot() ? `${parent.path}/` : '';
@@ -401,16 +418,14 @@ class AdocView extends TextFileView {
     }
 
     private applyModeDisplay(): void {
-        if (this.mode === 'source') {
-            this.previewEl.style.display  = 'none';
-            this.sourceEl.style.display   = 'block';
-            this.toolbarEl.style.display  = 'flex';
+        const isSource = this.mode === 'source';
+        this.previewEl.toggleClass('adoc-hidden', isSource);
+        this.sourceEl.toggleClass('adoc-hidden', !isSource);
+        this.toolbarEl.toggleClass('adoc-hidden', !isSource);
+        if (isSource) {
             this.sourceEl.value = this.data ?? '';
             this.sourceEl.focus();
         } else {
-            this.toolbarEl.style.display  = 'none';
-            this.sourceEl.style.display   = 'none';
-            this.previewEl.style.display  = 'block';
             if (this.data) this.renderPreview();
         }
     }
@@ -427,7 +442,9 @@ class AdocView extends TextFileView {
                     stem: '',          // enable latexmath by default; allows latexmath/asciimath macros
                 },
             }) as string;
-            this.previewEl.innerHTML = html;
+            const parsed = new DOMParser().parseFromString(html, 'text/html');
+            this.previewEl.empty();
+            Array.from(parsed.body.childNodes).forEach(n => this.previewEl.appendChild(n));
             this.resolveImages();
             this.handleLinks();
             void this.renderMathFormulas();
@@ -439,9 +456,11 @@ class AdocView extends TextFileView {
                 requestAnimationFrame(() => this.scrollToAnchor(pending.id));
             }
         } catch (e) {
-            console.error('[AsciiDoc Preview] Render error:', e);
-            this.previewEl.innerHTML =
-                `<div class="adoc-render-error"><strong>Render error</strong><pre>${String(e)}</pre></div>`;
+            console.error('[AsciiDoc Live] Render error:', e);
+            this.previewEl.empty();
+            const errEl = this.previewEl.createEl('div', { cls: 'adoc-render-error' });
+            errEl.createEl('strong', { text: 'Render error' });
+            errEl.createEl('pre', { text: String(e) });
         }
     }
 
@@ -483,7 +502,7 @@ class AdocView extends TextFileView {
         filePart = filePart.replace(/\.html$/, '.adoc');
 
         // URL-decode: Asciidoctor encodes spaces/specials in filenames (e.g. %20)
-        try { filePart = decodeURIComponent(filePart); } catch (_) {}
+        try { filePart = decodeURIComponent(filePart); } catch { /* invalid URI encoding — use as-is */ }
 
         const parent  = this.file?.parent;
         const absPath = !parent || parent.isRoot() ? filePart : `${parent.path}/${filePart}`;
@@ -574,8 +593,7 @@ class AdocView extends TextFileView {
 
             try {
                 const rendered = renderMath(src, display);
-                // Use innerHTML = '' to clear all child nodes (including text nodes)
-                el.innerHTML = '';
+                el.empty();
                 el.appendChild(rendered);
                 if (!display) toTypeset.push(el);
             } catch (e) {
@@ -589,12 +607,13 @@ class AdocView extends TextFileView {
         // For inline math: ensure MathJax processes the newly attached containers
         // by triggering a typeset pass if the MathJax 3 API is available
         if (toTypeset.length > 0) {
-            const MJ = (window as any).MathJax;
+            const MJ = (window as unknown as { MathJax?: MathJaxAPI }).MathJax;
             if (typeof MJ?.typesetPromise === 'function') {
                 try {
                     await MJ.typesetPromise(toTypeset);
                 } catch (e) {
                     // non-fatal; renderMath already created the containers
+                    console.debug('[AsciiDoc Live] MathJax.typesetPromise error:', e);
                 }
             }
         }
@@ -618,7 +637,7 @@ class AdocView extends TextFileView {
 
             // URL-decode: Asciidoctor may encode spaces as %20 in src attributes
             let src: string;
-            try { src = decodeURIComponent(rawSrc); } catch (_) { src = rawSrc; }
+            try { src = decodeURIComponent(rawSrc); } catch { src = rawSrc; }
 
             // 1. Relative to current file's parent folder (standard AsciiDoc resolution)
             if (parentPath) {
@@ -637,7 +656,7 @@ class AdocView extends TextFileView {
 
 export default class AdocPlugin extends Plugin {
     settings: AdocPluginSettings;
-    processor: any;
+    processor: AsciidoctorProcessor;
     private activeViews: Set<AdocView> = new Set();
 
     // Pending cross-document anchor navigation set by handleLinkClick,
@@ -646,7 +665,7 @@ export default class AdocPlugin extends Plugin {
 
     async onload(): Promise<void> {
         await this.loadSettings();
-        this.processor = Asciidoctor();
+        this.processor = Asciidoctor() as unknown as AsciidoctorProcessor;
 
         this.registerView(VIEW_TYPE_ADOC, leaf => new AdocView(leaf, this));
         this.registerExtensions(['adoc', 'asciidoc', 'asc'], VIEW_TYPE_ADOC);
@@ -704,7 +723,7 @@ export default class AdocPlugin extends Plugin {
     broadcastContentChange(file: TFile | null, content: string): void {
         if (!file) return;
         for (const view of this.activeViews) {
-            if ((view as any).file === file) view.pushContentUpdate(content);
+            if ((view as TextFileView).file === file) view.pushContentUpdate(content);
         }
     }
 
@@ -733,7 +752,7 @@ class AdocSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: 'AsciiDoc Live Settings' });
+        containerEl.createEl('h3', { text: 'AsciiDoc Live settings' });
 
         new Setting(containerEl)
             .setName('Auto-refresh delay (ms)')

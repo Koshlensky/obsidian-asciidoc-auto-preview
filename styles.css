@@ -5,6 +5,8 @@
 
 /* ── View container ──────────────────────────────────────────────────────── */
 
+.adoc-hidden { display: none !important; }
+
 .adoc-view-container {
     display: flex;
     flex-direction: column;

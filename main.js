@@ -37460,7 +37460,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
         this.sourceEl.value = data;
         try {
           this.sourceEl.setSelectionRange(s, e2);
-        } catch (_) {
+        } catch (e3) {
         }
       }
     } else {
@@ -37487,7 +37487,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
     if (this.mode !== "preview" || !this.previewEl) return;
     (_a = this.previewEl.querySelector(`#${CSS.escape(id)}`)) == null ? void 0 : _a.scrollIntoView({ behavior: "smooth" });
   }
-  async onOpen() {
+  onOpen() {
     this.plugin.registerAdocView(this);
     this.debouncedRender = (0, import_obsidian.debounce)(
       () => this.renderPreview(),
@@ -37536,9 +37536,11 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       })
     );
     this.applyModeDisplay();
+    return Promise.resolve();
   }
-  async onClose() {
+  onClose() {
     this.plugin.unregisterAdocView(this);
+    return Promise.resolve();
   }
   // ── Toolbar ───────────────────────────────────────────────────────────────
   buildToolbar() {
@@ -37557,20 +37559,20 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       return b;
     };
     const sep = () => t2.createEl("span", { cls: "adoc-toolbar-sep" });
-    mkBtn("bold", "B", "Toggle Bold", "bold", () => this.wrapOrInsert("*", "*", "bold text"));
-    mkBtn("italic", "I", "Toggle Italic", "italic", () => this.wrapOrInsert("_", "_", "italic text"));
-    mkBtn("code", "`", "Toggle Mono", "mono", () => this.wrapOrInsert("`", "`", "code"));
-    mkBtn("strikethrough", "S", "Toggle Strikethrough", "strike", () => this.wrapOrInsert("[line-through]#", "#", "text"));
-    mkBtn("highlighter", "#", "Toggle Highlight", "highlight", () => this.wrapOrInsert("#", "#", "highlighted"));
+    mkBtn("bold", "B", "Toggle bold", "bold", () => this.wrapOrInsert("*", "*", "bold text"));
+    mkBtn("italic", "I", "Toggle italic", "italic", () => this.wrapOrInsert("_", "_", "italic text"));
+    mkBtn("code", "`", "Toggle mono", "mono", () => this.wrapOrInsert("`", "`", "code"));
+    mkBtn("strikethrough", "S", "Toggle strikethrough", "strike", () => this.wrapOrInsert("[line-through]#", "#", "text"));
+    mkBtn("highlighter", "#", "Toggle highlight", "highlight", () => this.wrapOrInsert("#", "#", "highlighted"));
     sep();
-    mkBtn("type", "H1", "Make Title", "title", () => this.insertTitle());
-    mkBtn("link", "Link", "Create Link", "link", () => this.insertLink());
-    mkBtn("image", "Img", "Paste Image", "image", () => this.insertImage());
-    mkBtn("table", "Tbl", "Create Table", "table", () => this.insertTable());
+    mkBtn("type", "H1", "Make title", "title", () => this.insertTitle());
+    mkBtn("link", "Link", "Create link", "link", () => this.insertLink());
+    mkBtn("image", "Img", "Paste image", "image", () => this.insertImage());
+    mkBtn("table", "Tbl", "Create table", "table", () => this.insertTable());
     sep();
-    mkBtn("clipboard", "Fmt", "Paste Formatted Text", "paste", () => this.pasteFormatted());
+    mkBtn("clipboard", "Fmt", "Paste formatted text", "paste", () => this.pasteFormatted());
     sep();
-    mkBtn("wrap-text", "Wrap", "Toggle Soft Wrap", "wrap", () => this.toggleSoftWrap());
+    mkBtn("wrap-text", "Wrap", "Toggle soft wrap", "wrap", () => this.toggleSoftWrap());
   }
   // ── Formatting helpers ────────────────────────────────────────────────────
   wrapOrInsert(before, after, placeholder) {
@@ -37638,7 +37640,8 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
           return;
         }
       }
-    } catch (_) {
+    } catch (err) {
+      console.warn("[AsciiDoc Live] Could not read clipboard image:", err);
     }
     const ta = this.sourceEl;
     const pos = ta.selectionStart;
@@ -37665,7 +37668,8 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       ta.setRangeText(text, pos, ta.selectionEnd, "end");
       ta.focus();
       this.syncData();
-    } catch (_) {
+    } catch (err) {
+      console.warn("[AsciiDoc Live] Could not read clipboard text:", err);
     }
   }
   toggleSoftWrap() {
@@ -37738,16 +37742,14 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
   }
   applyModeDisplay() {
     var _a;
-    if (this.mode === "source") {
-      this.previewEl.style.display = "none";
-      this.sourceEl.style.display = "block";
-      this.toolbarEl.style.display = "flex";
+    const isSource = this.mode === "source";
+    this.previewEl.toggleClass("adoc-hidden", isSource);
+    this.sourceEl.toggleClass("adoc-hidden", !isSource);
+    this.toolbarEl.toggleClass("adoc-hidden", !isSource);
+    if (isSource) {
       this.sourceEl.value = (_a = this.data) != null ? _a : "";
       this.sourceEl.focus();
     } else {
-      this.toolbarEl.style.display = "none";
-      this.sourceEl.style.display = "none";
-      this.previewEl.style.display = "block";
       if (this.data) this.renderPreview();
     }
   }
@@ -37765,7 +37767,9 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
           // enable latexmath by default; allows latexmath/asciimath macros
         }
       });
-      this.previewEl.innerHTML = html;
+      const parsed = new DOMParser().parseFromString(html, "text/html");
+      this.previewEl.empty();
+      Array.from(parsed.body.childNodes).forEach((n) => this.previewEl.appendChild(n));
       this.resolveImages();
       this.handleLinks();
       void this.renderMathFormulas();
@@ -37775,8 +37779,11 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
         requestAnimationFrame(() => this.scrollToAnchor(pending.id));
       }
     } catch (e2) {
-      console.error("[AsciiDoc Preview] Render error:", e2);
-      this.previewEl.innerHTML = `<div class="adoc-render-error"><strong>Render error</strong><pre>${String(e2)}</pre></div>`;
+      console.error("[AsciiDoc Live] Render error:", e2);
+      this.previewEl.empty();
+      const errEl = this.previewEl.createEl("div", { cls: "adoc-render-error" });
+      errEl.createEl("strong", { text: "Render error" });
+      errEl.createEl("pre", { text: String(e2) });
     }
   }
   handleLinks() {
@@ -37811,7 +37818,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
     filePart = filePart.replace(/\.html$/, ".adoc");
     try {
       filePart = decodeURIComponent(filePart);
-    } catch (_) {
+    } catch (e2) {
     }
     const parent = (_a = this.file) == null ? void 0 : _a.parent;
     const absPath = !parent || parent.isRoot() ? filePart : `${parent.path}/${filePart}`;
@@ -37872,7 +37879,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       if (!src) continue;
       try {
         const rendered = (0, import_obsidian.renderMath)(src, display);
-        el.innerHTML = "";
+        el.empty();
         el.appendChild(rendered);
         if (!display) toTypeset.push(el);
       } catch (e2) {
@@ -37886,6 +37893,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
         try {
           await MJ.typesetPromise(toTypeset);
         } catch (e2) {
+          console.debug("[AsciiDoc Live] MathJax.typesetPromise error:", e2);
         }
       }
     }
@@ -37903,7 +37911,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       let src;
       try {
         src = decodeURIComponent(rawSrc);
-      } catch (_) {
+      } catch (e2) {
         src = rawSrc;
       }
       if (parentPath) {
@@ -38000,7 +38008,7 @@ var AdocSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "AsciiDoc Live Settings" });
+    containerEl.createEl("h3", { text: "AsciiDoc Live settings" });
     new import_obsidian.Setting(containerEl).setName("Auto-refresh delay (ms)").setDesc("How long to wait after the last keystroke before updating the preview").addText(
       (text) => text.setPlaceholder("500").setValue(this.plugin.settings.refreshDelay.toString()).onChange(async (value) => {
         const parsed = parseInt(value);
