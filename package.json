@@ -1,5 +1,5 @@
 {
-  "name": "asciidian",
+  "name": "asciidoc-live",
   "version": "1.0.0",
   "description": "Full AsciiDoc renderer for Obsidian with live preview auto-refresh",
   "main": "main.js",
@@ -12,7 +12,7 @@
     "obsidian",
     "plugin",
     "asciidoc",
-    "asciidian",
+    "asciidoc-live",
     "preview",
     "renderer"
   ],

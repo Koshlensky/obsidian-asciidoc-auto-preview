@@ -37684,7 +37684,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
       const savedFile = await this.saveImageToVault(blob, item.type);
       this.insertImageReference(savedFile);
     } catch (err) {
-      console.error("[Asciidian] Failed to save pasted image:", err);
+      console.error("[AsciiDoc Live] Failed to save pasted image:", err);
     }
   }
   async saveImageToVault(blob, mimeType) {
@@ -37876,7 +37876,7 @@ var AdocView = class _AdocView extends import_obsidian.TextFileView {
         el.appendChild(rendered);
         if (!display) toTypeset.push(el);
       } catch (e2) {
-        console.error("[Asciidian] renderMath error:", e2, { src, display });
+        console.error("[AsciiDoc Live] renderMath error:", e2, { src, display });
       }
     }
     await (0, import_obsidian.finishRenderMath)();
@@ -38000,7 +38000,7 @@ var AdocSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "AsciiDoc Preview Settings" });
+    containerEl.createEl("h2", { text: "AsciiDoc Live Settings" });
     new import_obsidian.Setting(containerEl).setName("Auto-refresh delay (ms)").setDesc("How long to wait after the last keystroke before updating the preview").addText(
       (text) => text.setPlaceholder("500").setValue(this.plugin.settings.refreshDelay.toString()).onChange(async (value) => {
         const parsed = parseInt(value);

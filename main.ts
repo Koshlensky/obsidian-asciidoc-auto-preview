@@ -335,7 +335,7 @@ class AdocView extends TextFileView {
             const savedFile = await this.saveImageToVault(blob, item.type);
             this.insertImageReference(savedFile);
         } catch (err) {
-            console.error('[Asciidian] Failed to save pasted image:', err);
+            console.error('[AsciiDoc Live] Failed to save pasted image:', err);
         }
     }
 
@@ -579,7 +579,7 @@ class AdocView extends TextFileView {
                 el.appendChild(rendered);
                 if (!display) toTypeset.push(el);
             } catch (e) {
-                console.error('[Asciidian] renderMath error:', e, { src, display });
+                console.error('[AsciiDoc Live] renderMath error:', e, { src, display });
             }
         }
 
@@ -733,7 +733,7 @@ class AdocSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: 'AsciiDoc Preview Settings' });
+        containerEl.createEl('h2', { text: 'AsciiDoc Live Settings' });
 
         new Setting(containerEl)
             .setName('Auto-refresh delay (ms)')
